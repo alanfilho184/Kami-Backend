@@ -1,0 +1,81 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+}
+
+enum Ban_Type {
+    TEMPORARY
+    PERMANENT
+    UNBANNED
+}
+
+enum Available_Languagues {
+    PT_BR
+    EN_US
+}
+
+model beta_users {
+    id      String @id @default(auto()) @map("_id") @db.ObjectId
+    user_id String
+}
+
+model blocked_users {
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    user_id      String
+    ban_count    Int
+    current_ban  Ban_Type
+    ban_duration DateTime
+}
+
+model irt_sheets {
+    id         String @id @default(auto()) @map("_id") @db.ObjectId
+    user_id    String
+    sheet_name String
+    msg_id     String
+    channel_id String
+    server_id  String
+}
+
+model premium_users {
+    id      String @id @default(auto()) @map("_id") @db.ObjectId
+    user_id String
+}
+
+model server_config {
+    id              String               @id @default(auto()) @map("_id") @db.ObjectId
+    server_id       String
+    language        Available_Languagues
+    force_languague Boolean
+}
+
+model sheets {
+    id             String   @id @default(auto()) @map("_id") @db.ObjectId
+    user_id        String
+    sheet_name     String
+    sheet_password String
+    is_public      Boolean  @default(false)
+    last_use       DateTime
+    attributes     Json
+}
+
+model usage_info {
+    id                String @id @default(auto()) @map("_id") @db.ObjectId
+    bot_command_count Int
+    bot_button_count  Int
+}
+
+model user_config {
+    id             String               @id @default(auto()) @map("_id") @db.ObjectId
+    userid         String
+    language       Available_Languagues
+    secret_roll    Boolean
+    secret_insan   Boolean
+    secret_general Boolean
+    secret_sheet   Boolean
+    secret_send    Boolean
+    default_sheet  String
+}
