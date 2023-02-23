@@ -66,7 +66,7 @@ export default class LogHandler {
         }
     }
 
-    public registerError(err: Error) {
+    public registerError(err: unknown) {
         const errorString = inspect(err, false, 99)
 
         const time = DateTime.now().setZone('America/Fortaleza').toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)

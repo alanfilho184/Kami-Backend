@@ -1,17 +1,20 @@
 import * as validations from './validations'
+import { MongoClient } from 'mongodb'
 
 export {}
 
 declare global {
+    type Db = MongoClient.Db
+
     enum Ban_Type {
-        TEMPORARY,
-        PERMANENT,
-        UNBANNED,
+        TEMPORARY = 'TEMPORARY',
+        PERMANENT = 'PERMANENT',
+        UNBANNED = 'UNBANNED',
     }
 
     enum Available_Languagues {
-        PT_BR,
-        EN_US,
+        PT_BR = 'PT_BR',
+        EN_US = 'EN_US',
     }
 
     type User_Id = validations.User_Id
@@ -55,19 +58,35 @@ declare global {
         sheet_name: Sheet_Name
         sheet_password: string
         is_public: boolean
-        attributes: json
+        attributes: object
         last_use: Date
     }
 
     type Usage_Info = {
-        bot_command_count: number
-        bot_button_count: number
+        bot_commands_count: number
+        bot_buttons_count: number
+        bot_users_count: number
+        bot_servers_count: number
     }
 
     type User_Config = {
         user_id: User_Id
         languague: Available_Languagues
         default_sheet: Sheet_Name
+        secret_roll: boolean
+        secret_insan: boolean
+        secret_general: boolean
+        secret_sheet: boolean
+        secret_send: boolean
+    }
+
+    type Tutorial = {
+        link: string
+        title: string
+        desc: string
+        thumb: string
+        tags: string[]
+        tutorial: string
     }
 
     namespace Express {
@@ -76,6 +95,13 @@ declare global {
         }
         interface Request {
             startTime: number
+            user: {
+                id: string
+                username: string
+                discriminator: string
+                locale: string
+                avatar_url: string
+            }
         }
     }
 }

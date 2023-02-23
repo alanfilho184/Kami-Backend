@@ -1,7 +1,7 @@
 import { config } from '../config/config'
 import EventListener from 'events'
 import { Server } from 'socket.io'
-import prisma from '../config/database'
+import tutorialsCache from '../utils/cache'
 
 const Events = new EventListener()
 
@@ -12,9 +12,13 @@ export default function createSocket(server: any) {
         },
     })
 
-    //io.use(verifyTokenWebsocket)
+    io.on('connection', socket => {
+        socket.on('tutorialsSearch', search => {
+            const tutorials = tutorialsCache.searchTutorials(search)
 
-    io.on('connection', socket => {})
+            socket.emit('tutorialsFound', { tutorials: tutorials })
+        })
+    })
 }
 
 export { Events }

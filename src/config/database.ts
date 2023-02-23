@@ -1,13 +1,9 @@
-import { PrismaClient } from '@prisma/client'
+import { MongoClient } from 'mongodb'
 import { config } from './config'
 
-const prisma = new PrismaClient({
-    datasources: {
-        db: {
-            url: config.default.DATABASE_URL,
-        }
-    }
-})
+const mongo = new MongoClient(config.default.DATABASE_URL)
 
-export const checkConnection = async () => await prisma.usage_info.count()
-export default prisma
+const db = mongo.db(config.default.DATABASE_NAME)
+
+export const checkConnection = async () => await db.stats()
+export default db
