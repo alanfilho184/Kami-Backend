@@ -89,6 +89,12 @@ declare global {
         tutorial: string
     }
 
+    type Command = {
+        name: string,
+        description:string,
+        type: number
+    }
+
     namespace Express {
         interface Application {
             start: function

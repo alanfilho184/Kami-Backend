@@ -11,6 +11,7 @@ class Config_Development {
     O_AUTH_REDIRECT_URI: string | undefined
     JWT_KEY: string | undefined
     AES_KEY: string | undefined
+    API_TOKEN: string | undefined
     CORS_ORIGIN: string | string[]
     constructor() {
         this.ENV = 'development'
@@ -25,6 +26,7 @@ class Config_Development {
         this.O_AUTH_REDIRECT_URI = process.env.O_AUTH_REDIRECT_URI
         this.JWT_KEY = process.env.JWT_KEY
         this.AES_KEY = process.env.AES_KEY
+        this.API_TOKEN = process.env.API_TOKEN
 
         if (process.env.CORS_ORIGIN) {
             this.CORS_ORIGIN = process.env.CORS_ORIGIN.search(',') != -1 ? process.env.CORS_ORIGIN.split(',') : process.env.CORS_ORIGIN

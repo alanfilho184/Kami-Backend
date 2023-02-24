@@ -1,7 +1,7 @@
 import { config } from '../config/config'
 import EventListener from 'events'
 import { Server } from 'socket.io'
-import tutorialsCache from '../utils/cache'
+import tutorialsCache from '../utils/cache/tutorials'
 
 const Events = new EventListener()
 

@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
 import logger from '../config/logger'
-import tutorialsCache from '../utils/cache'
+import tutorialsCache from '../utils/cache/tutorials'
 
 const router = Router()
 

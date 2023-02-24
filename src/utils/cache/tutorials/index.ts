@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import stringSimlarity from 'string-similarity'
-import db from '../../config/database'
+import db from '../../../config/database'
 
 class Tutorials_Cache {
     private db: Db
