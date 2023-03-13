@@ -13,6 +13,7 @@ class Config_Development {
     AES_KEY: string | undefined
     API_TOKEN: string | undefined
     CORS_ORIGIN: string | string[]
+    SALT_ROUNDS: number | undefined
     constructor() {
         this.ENV = 'development'
         this.PORT = Number(process.env.PORT)
@@ -27,6 +28,7 @@ class Config_Development {
         this.JWT_KEY = process.env.JWT_KEY
         this.AES_KEY = process.env.AES_KEY
         this.API_TOKEN = process.env.API_TOKEN
+        this.SALT_ROUNDS = Number(process.env.SALT_ROUNDS)
 
         if (process.env.CORS_ORIGIN) {
             this.CORS_ORIGIN = process.env.CORS_ORIGIN.search(',') != -1 ? process.env.CORS_ORIGIN.split(',') : process.env.CORS_ORIGIN

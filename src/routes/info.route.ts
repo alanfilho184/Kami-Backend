@@ -6,7 +6,7 @@ const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
     try {
-        const query = await Promise.all([db.collection('usage_info').findOne({ type: 'Counters' }), db.collection('sheets').countDocuments()])
+        const query = await Promise.all([db.usage_info.findFirst(), db.sheets.count()])
 
         const usageData = {
             commandsCount: query[0]!.bot_commands_count,

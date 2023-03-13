@@ -17,9 +17,7 @@ class Tutorials_Cache {
     }
 
     updateCache() {
-        const tutorials = this.db.collection('tutorials').find()
-
-        tutorials.toArray().then((tutorials: Tutorial[]) => {
+        this.db.tutorials.findMany().then(tutorials => {
             try {
                 fs.mkdirSync(path.join(__dirname, 'json'))
             } catch (err: any) {

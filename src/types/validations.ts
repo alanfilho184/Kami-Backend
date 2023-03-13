@@ -1,11 +1,4 @@
-class ValidationError extends Error {
-    code: string
-    constructor(message: string, code: string) {
-        super(message)
-        this.name = 'ValidationError'
-        this.code = code
-    }
-}
+import { ValidationError } from './errors'
 
 function default_id_validation(id: string, type: string) {
     if (!id) {
@@ -19,10 +12,10 @@ function default_id_validation(id: string, type: string) {
     }
 }
 
-class User_Id {
-    user_id: string
-    constructor(user_id: string) {
-        this.user_id = default_id_validation(user_id, 'user_id')
+class Discord_Id {
+    discord_id: string
+    constructor(discord_id: string) {
+        this.discord_id = default_id_validation(discord_id, 'discord_id')
     }
 }
 
@@ -60,4 +53,4 @@ class Sheet_Name {
     }
 }
 
-export { User_Id, Server_Id, Msg_Id, Channel_Id, Sheet_Name }
+export { Discord_Id, Server_Id, Msg_Id, Channel_Id, Sheet_Name }

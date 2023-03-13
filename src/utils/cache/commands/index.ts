@@ -18,9 +18,7 @@ class Commands_Cache {
         this.db = db
         this.jsonPath = path.join(__dirname, 'json', 'commands.json')
 
-        const commands = this.db.collection('commands').find()
-
-        commands.toArray().then((commands: Command[]) => {
+        this.db.commands.findMany().then((commands: Command[]) => {
             try {
                 fs.mkdirSync(path.join(__dirname, 'json'))
             } catch (err: any) {
@@ -33,16 +31,15 @@ class Commands_Cache {
     }
 
     async setCommands(commands: Command[]) {
-        const validatedCommands: Command[] = new Array()
+        const validatedCommands: Command[] = []
         commands.forEach(command => {
-            if (typeof command.name == 'string' && typeof command.description == 'string' && command.type == 1 || command.type == 3) {
+            if ((typeof command.name == 'string' && typeof command.description == 'string' && command.type == 1) || command.type == 3) {
                 validatedCommands.push({
                     name: command.name,
                     description: command.description,
-                    type: command.type
+                    type: command.type,
                 })
-            }
-            else {
+            } else {
                 throw new ValidationError(`${JSON.stringify(command)} is not a valid command`, `Not a valid Command type`)
             }
         })
@@ -50,12 +47,11 @@ class Commands_Cache {
         try {
             fs.writeFileSync(this.jsonPath, JSON.stringify(validatedCommands), { flag: 'w+' })
 
-            await this.db.collection('commands').deleteMany()
-            await this.db.collection('commands').insertMany(validatedCommands)
+            await this.db.commands.deleteMany()
+            await this.db.commands.createMany({ data: validatedCommands })
 
             return true
-        }
-        catch (err) {
+        } catch (err) {
             throw err
         }
     }

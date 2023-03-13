@@ -23,8 +23,7 @@ router.post('/', async (req: Request, res: Response) => {
     } catch (err: any) {
         if (err.name == 'ValidationError') {
             res.status(400).json({ error: err.message })
-        }
-        else {
+        } else {
             logger.registerError(err)
             res.status(500).end()
         }
