@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt'
 type PreparedUser = {
     username: string
     email: string
-    avatar?: string
     password: string
 }
 
@@ -15,93 +14,95 @@ class UserServices {
     public avatarURLRegex: RegExp
     constructor(db: Db) {
         this.db = db
-        this.emailRegex = new RegExp(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
+        this.emailRegex = new RegExp(
+            /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+        )
         this.usernameRegex = new RegExp(/^[a-zA-Z0-9_]+$/)
         this.avatarURLRegex = new RegExp(/(https?:\/\/.*.(?:png|jpg|jpeg|webp|gif|gifv))/i)
     }
 
     async validateUser(user: User): Promise<Array<{ field: string; message: string }>> {
         const invalidFields = []
+        if (!user.username) {
+            invalidFields.push({
+                field: 'username',
+                message: 'Nome de usuário é obrigatório',
+            })
+        }
+
         if (user.username.length < 3) {
             invalidFields.push({
                 field: 'username',
-                message: 'Username must be at least 3 characters long',
+                message: 'Nome de usuário deve ter pelo menos 3 caracteres',
             })
         }
 
         if (user.username.length > 32) {
             invalidFields.push({
                 field: 'username',
-                message: 'Username must be at most 32 characters long',
+                message: 'Nome de usuário deve ter no máximo 32 caracteres',
             })
         }
 
         if (!this.usernameRegex.test(user.username)) {
             invalidFields.push({
                 field: 'username',
-                message: 'Username must only contain letters, numbers and underscores',
+                message: 'Nome de usuário deve conter apenas letras, números e underlines',
             })
         }
 
         if (!this.usernameRegex.test(user.username)) {
             invalidFields.push({
                 field: 'username',
-                message: 'Username must only contain letters, numbers and underscores',
+                message: 'Nome de usuário deve conter apenas letras, números e underlines',
             })
         }
 
         if (!user.email) {
             invalidFields.push({
                 field: 'email',
-                message: 'Email is required',
+                message: 'Email é obrigatório',
             })
         }
 
         if (!this.emailRegex.test(user.email)) {
             invalidFields.push({
                 field: 'email',
-                message: 'Email is invalid',
+                message: 'Email inválido',
             })
         }
 
         if (!user.password) {
             invalidFields.push({
                 field: 'password',
-                message: 'Password is required',
+                message: 'Senha é obrigatória',
             })
         }
 
         if (user.password.length < 8) {
             invalidFields.push({
                 field: 'password',
-                message: 'Password must be at least 8 characters long',
-            })
-        }
-
-        if (user.avatar && !this.avatarURLRegex.test(user.avatar)) {
-            invalidFields.push({
-                field: 'avatar',
-                message: 'Avatar URL is invalid',
+                message: 'Senha deve ter pelo menos 8 caracteres',
             })
         }
 
         try {
             await this.db.users.findFirstOrThrow({ where: { username: user.username } })
-        } catch (err) {
+
             invalidFields.push({
                 field: 'username',
-                message: 'Username already exists',
+                message: 'Nome de usuário já existe',
             })
-        }
+        } catch (err) {}
 
         try {
             await this.db.users.findFirstOrThrow({ where: { email: user.email } })
-        } catch (err) {
+
             invalidFields.push({
                 field: 'email',
-                message: 'Email already exists',
+                message: 'Email já existe',
             })
-        }
+        } catch (err) {}
 
         return invalidFields
     }
@@ -110,11 +111,10 @@ class UserServices {
         const preparedUser: PreparedUser = {
             username: user.username,
             email: user.email,
-            avatar: user.avatar,
             password: user.password,
         }
 
-        preparedUser.password = await bcrypt.hashSync(preparedUser.password, config.default.saltRounds)
+        preparedUser.password = await bcrypt.hashSync(preparedUser.password, config.default.SALT_ROUNDS)
 
         return preparedUser
     }

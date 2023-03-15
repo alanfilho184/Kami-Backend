@@ -17,13 +17,6 @@ declare global {
         EN_US = 'EN_US',
     }
 
-    enum LoginErrorCodes {
-        EMAIL_NOT_FOUND,
-        USERNAME_NOT_FOUND,
-        PASSWORD_INCORRECT,
-        INVALID_CREDENTIALS,
-    }
-
     type Discord_Id = validations.Discord_Id
     type Server_Id = validations.Server_Id
     type Msg_Id = validations.Msg_Id
@@ -121,7 +114,7 @@ declare global {
                 id: number
                 discord_id?: Discord_Id
                 username: string
-                avatar?: string
+                avatar_url?: string
                 is_beta: boolean
                 is_premium: boolean
             }

@@ -7,6 +7,7 @@ import DiscordOauth2 from 'discord-oauth2'
 import jwt from 'jsonwebtoken'
 import { LoginError } from '../types/errors'
 import UserController from '../controllers/user.controller'
+import { LoginErrorCodes } from '../types/errors'
 
 class AuthServices {
     private userController: UserController

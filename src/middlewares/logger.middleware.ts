@@ -21,11 +21,21 @@ export function logger(req: Request, res: Response, next: NextFunction) {
         let info
         if (req.user && Object.keys(req.body)[0]) {
             const data = req.body
+
+            if (data.password) {
+                data.password = '*'
+            }
+
             info = `Usuário: [ID: ${req.user.id} Name: ${req.user.username}}] | Body Request: [${JSON.stringify(data)}]`
         } else if (req.user && !Object.keys(req.body)[0]) {
             info = `Usuário: [ID: ${req.user.id} Name: ${req.user.username}}]`
         } else if (Object.keys(req.body)[0]) {
             const data = req.body
+
+            if (data.password) {
+                data.password = '*'
+            }
+
             info = `Body Request: [${JSON.stringify(data)}]`
         } else {
             info = 'Não autenticado | Sem body'

@@ -8,7 +8,7 @@ import { config } from '../config/config'
 const authServices = new AuthServices()
 const userController = new UserController(db)
 
-const excludedRoutes = ['POST|/auth/login', 'GET|/info', 'GET|/tutorial', 'GET|/command']
+const excludedRoutes = ['POST|/auth/login', 'GET|/info', 'GET|/tutorial', 'GET|/command', 'POST|/user']
 
 export async function verifyToken(req: Request, res: Response, next: NextFunction) {
     req.startTime = DateTime.now().setZone('America/Fortaleza').toMillis()
@@ -28,7 +28,7 @@ export async function verifyToken(req: Request, res: Response, next: NextFunctio
                                 id: user.id,
                                 discord_id: user.discord_id,
                                 username: user.username,
-                                avatar: user.avatar,
+                                avatar_url: user.avatar,
                                 is_beta: user.is_beta,
                                 is_premium: user.is_premium,
                             }
