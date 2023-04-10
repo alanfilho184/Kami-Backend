@@ -63,6 +63,7 @@ declare global {
     type Sheet = {
         id: number
         user_id: number
+        user?: Express.Request['user']
         sheet_name: Sheet_Name
         sheet_password: string
         is_public: boolean

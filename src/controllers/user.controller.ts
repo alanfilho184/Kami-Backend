@@ -96,4 +96,68 @@ export default class UserController {
             }),
         )
     }
+
+    async updateById(id: number, newUser: any): Promise<User | null> {
+        return toUser(
+            await this.db.users.update({
+                where: {
+                    id: id,
+                },
+                data: newUser,
+            }),
+        )
+    }
+
+    async mergeByIdAndDiscordId(user: Express.Request['user'], discordUser: User) {
+        const newId = user.id
+        const oldId = discordUser.id
+
+        this.db.$transaction([
+            this.db.sheets.updateMany({
+                where: {
+                    user_id: oldId,
+                },
+                data: {
+                    user_id: newId,
+                }
+            }),
+            this.db.irt_sheets.updateMany({
+                where: {
+                    user_id: oldId,
+                },
+                data: {
+                    user_id: newId,
+                }
+            }),
+            this.db.users_config.updateMany({
+                where: {
+                    user_id: oldId,
+                },
+                data: {
+                    user_id: newId,
+                }
+            }),
+            this.db.blocked_users.updateMany({
+                where: {
+                    user_id: oldId,
+                },
+                data: {
+                    user_id: newId,
+                }
+            }),
+            this.db.users.delete({
+                where: {
+                    id: oldId,
+                }
+            }),
+            this.db.users.update({
+                where: {
+                    id: newId,
+                },
+                data: {
+                    discord_id: `${discordUser.discord_id}`,
+                }
+            })
+        ])
+    }
 }

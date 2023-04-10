@@ -15,38 +15,35 @@ class AuthServices {
         this.userController = new UserController(db)
     }
 
-    // async generateTokenByDiscordCode(code: string): Promise<string> {
-    //     const oauth = new DiscordOauth2()
+    async getDiscordUserByCode(code: string){
+        const oauth = new DiscordOauth2()
 
-    //     const params = new URLSearchParams()
-    //     params.append('client_id', `${config.default.CLIENT_ID}`)
-    //     params.append('client_secret', `${config.default.CLIENT_SECRET}`)
-    //     params.append('grant_type', 'authorization_code')
-    //     params.append('code', code)
-    //     params.append('redirect_uri', `${config.default.O_AUTH_REDIRECT_URI}`)
-    //     params.append('scope', 'identify')
+        const params = new URLSearchParams()
+        params.append('client_id', `${config.default.CLIENT_ID}`)
+        params.append('client_secret', `${config.default.CLIENT_SECRET}`)
+        params.append('grant_type', 'authorization_code')
+        params.append('code', code)
+        params.append('redirect_uri', `${config.default.O_AUTH_REDIRECT_URI}`)
+        params.append('scope', 'identify')
 
-    //     const headers = {
-    //         'Content-Type': 'application/x-www-form-urlencoded',
-    //         Accept: 'application/json',
-    //     }
+        const headers = {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: 'application/json',
+        }
 
-    //     const response = await axios.post('https://discord.com/api/oauth2/token', params, { headers })
-    //     const userInfo = await oauth.getUser(response.data.access_token)
+        const response = await axios.post('https://discord.com/api/oauth2/token', params, { headers })
+        const userInfo = await oauth.getUser(response.data.access_token)
 
-    //     const user = {
-    //         id: userInfo.id,
-    //         username: userInfo.username,
-    //         discriminator: userInfo.discriminator,
-    //         locale: userInfo.locale,
-    //         avatar_url: `https://cdn.discordapp.com/avatars/${userInfo.id}/${userInfo.avatar}.png`,
-    //     }
+        const user = {
+            id: userInfo.id,
+            username: userInfo.username,
+            discriminator: userInfo.discriminator,
+            locale: userInfo.locale,
+            avatar_url: `https://cdn.discordapp.com/avatars/${userInfo.id}/${userInfo.avatar}.png`,
+        }
 
-    //     const jwtToken = jwt.sign(user, config.default.JWT_KEY, { expiresIn: '7d' })
-    //     const encryptedToken = crypto.AES.encrypt(jwtToken, config.default.AES_KEY).toString()
-
-    //     return encryptedToken
-    // }
+        return user
+    }
 
     async login(user: { username?: string; email?: string; password: string }): Promise<string> {
         let userFromDb: User | null = null

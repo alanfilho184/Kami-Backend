@@ -17,12 +17,30 @@ class Discord_Id {
     constructor(discord_id: string) {
         this.discord_id = default_id_validation(discord_id, 'discord_id')
     }
+
+    static isValid(discord_id: string) {
+        try {
+            new Discord_Id(discord_id)
+            return true
+        } catch (err) {
+            return false
+        }
+    }
 }
 
 class Server_Id {
     server_id: string
     constructor(server_id: string) {
         this.server_id = default_id_validation(server_id, 'server_id')
+    }
+
+    static isValid(server_id: string) {
+        try {
+            new Server_Id(server_id)
+            return true
+        } catch (err) {
+            return false
+        }
     }
 }
 
@@ -31,12 +49,30 @@ class Msg_Id {
     constructor(msg_id: string) {
         this.msg_id = default_id_validation(msg_id, 'msg_id')
     }
+
+    static isValid(msg_id: string) {
+        try {
+            new Msg_Id(msg_id)
+            return true
+        } catch (err) {
+            return false
+        }
+    }
 }
 
 class Channel_Id {
     channel_id: string
     constructor(channel_id: string) {
         this.channel_id = default_id_validation(channel_id, 'channel_id')
+    }
+
+    static isValid(channel_id: string) {
+        try {
+            new Channel_Id(channel_id)
+            return true
+        } catch (err) {
+            return false
+        }
     }
 }
 
@@ -49,6 +85,15 @@ class Sheet_Name {
             throw new ValidationError(`"${sheet_name}" is not a valid sheet_name`, `Contains invalid characters`)
         } else {
             this.sheet_name = sheet_name
+        }
+    }
+
+    static isValid(sheet_name: string) {
+        try {
+            new Sheet_Name(sheet_name)
+            return true
+        } catch (err) {
+            return false
         }
     }
 }
