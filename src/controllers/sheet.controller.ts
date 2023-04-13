@@ -32,13 +32,27 @@ function toSheetArray(sheets: any[]): Sheet[] | null {
     }
 }
 
+function toSheetHeadArray(sheets: any[]): Sheet_Head[] | null {
+    try {
+        return sheets.map(sheet => {
+            return {
+                id: sheet.id,
+                user_id: sheet.user_id,
+                sheet_name: sheet.sheet_name
+            }
+        })
+    } catch (err) {
+        return null
+    }
+}
+
 export default class SheetController {
     private db: Db
     constructor(db: Db) {
         this.db = db
     }
 
-    async create(sheet: Sheet): Promise<Sheet| null> {
+    async create(sheet: Sheet): Promise<Sheet | null> {
         return toSheet(
             await this.db.sheets.create({
                 data: {
@@ -61,8 +75,8 @@ export default class SheetController {
         )
     }
 
-    async getByUserId(userId: number): Promise<Sheet[] | null> {
-        return toSheetArray(
+    async getByUserId(userId: number): Promise<Sheet_Head[] | null> {
+        return toSheetHeadArray(
             await this.db.sheets.findMany({
                 where: {
                     user_id: userId,

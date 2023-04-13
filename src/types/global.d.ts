@@ -71,6 +71,12 @@ declare global {
         last_use: Date
     }
 
+    type Sheet_Head = {
+        id: number
+        user_id: number
+        sheet_name: Sheet_Name
+    }
+
     type Usage_Info = {
         bot_commands_count: number
         bot_buttons_count: number
