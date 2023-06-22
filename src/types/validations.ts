@@ -79,8 +79,8 @@ class Channel_Id {
 class Sheet_Name {
     sheet_name: string
     constructor(sheet_name: string) {
-        if (sheet_name.length > 40) {
-            throw new ValidationError(`"${sheet_name}" is not a valid sheet_name`, `Exceeded the maximum of 40 characters`)
+        if (sheet_name.length > 32) {
+            throw new ValidationError(`"${sheet_name}" is not a valid sheet_name`, `Exceeded the maximum of 32 characters`)
         } else if (sheet_name.match(/[ '$%]/g)) {
             throw new ValidationError(`"${sheet_name}" is not a valid sheet_name`, `Contains invalid characters`)
         } else {

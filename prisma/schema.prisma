@@ -72,6 +72,8 @@ model sheets {
     sheet_password String
     last_use       DateTime       @default(now()) @updatedAt @db.Timestamptz
     attributes     Json
+    legacy         Boolean        @default(false)
+    is_public      Boolean        @default(false)
     user_config    users_config[]
     irt_sheets     irt_sheets[]
 }

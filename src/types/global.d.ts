@@ -17,6 +17,19 @@ declare global {
         EN_US = 'EN_US',
     }
 
+    enum Section_Type {
+        STANDARD = 0,
+        DESCRIPTION = 1
+    }
+
+    enum Attribute_Type {
+        TEXT = 0,
+        NUMBER = 1,
+        IMAGE = 2,
+        LIST = 3,
+        BAR = 4
+    }
+
     type Discord_Id = validations.Discord_Id
     type Server_Id = validations.Server_Id
     type Msg_Id = validations.Msg_Id
@@ -67,7 +80,28 @@ declare global {
         sheet_name: Sheet_Name
         sheet_password: string
         is_public: boolean
-        attributes: object
+        attributes: {
+            [section: string]: {
+                name: string,
+                position: string,
+                type: Section_Type,
+                [attribute: string]: {
+                    value: string | number | string[]
+                    type: Attribute_Type
+                    position: number
+                    config?: {
+                        width?: number
+                        height?: number
+                        max?: number
+                        min?: number
+                        step?: number
+                        max_length?: number
+                        min_length?: number
+                    }
+                }
+            }
+        }
+        legacy: boolean
         last_use: Date
     }
 

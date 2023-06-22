@@ -1,3 +1,13 @@
+type PreparedSheet = {
+    sheet_name: Sheet_Name
+    user_id: number
+    sheet_password: string
+    is_public: boolean
+    attributes: {}
+    legacy: false
+    last_use: Date
+}
+
 function toSheet(sheet: any): Sheet | null {
     try {
         return {
@@ -6,6 +16,7 @@ function toSheet(sheet: any): Sheet | null {
             sheet_name: sheet.sheet_name,
             sheet_password: sheet.sheet_password,
             is_public: sheet.is_public,
+            legacy: sheet.legacy,
             attributes: sheet.attributes,
             last_use: sheet.last_use
         }
@@ -23,6 +34,7 @@ function toSheetArray(sheets: any[]): Sheet[] | null {
                 sheet_name: sheet.sheet_name,
                 sheet_password: sheet.sheet_password,
                 is_public: sheet.is_public,
+                legacy: sheet.legacy,
                 attributes: sheet.attributes,
                 last_use: sheet.last_use
             }
@@ -52,14 +64,17 @@ export default class SheetController {
         this.db = db
     }
 
-    async create(sheet: Sheet): Promise<Sheet | null> {
+    async create(sheet: PreparedSheet): Promise<Sheet | null> {
         return toSheet(
             await this.db.sheets.create({
                 data: {
                     user_id: sheet.user_id,
-                    sheet_name: sheet.sheet_name.toString(),
+                    sheet_name: sheet.sheet_name.sheet_name,
                     sheet_password: sheet.sheet_password,
-                    attributes: sheet.attributes
+                    attributes: sheet.attributes,
+                    is_public: sheet.is_public,
+                    legacy: sheet.legacy,
+                    last_use: sheet.last_use
                 },
             }),
         )
@@ -99,6 +114,24 @@ export default class SheetController {
                 },
             }),
         )
+    }
+
+    async getByUsernameAndSheetName(username: string, sheetName: string): Promise<Sheet | null> {
+        const user = await this.db.users.findUnique({ where: { username: username } })
+
+        if (user) {
+            return toSheet(
+                await this.db.sheets.findFirst({
+                    where: {
+                        user_id: user.id,
+                        sheet_name: sheetName,
+                    },
+                }),
+            )
+        }
+        else {
+            return null
+        }
     }
 
     async updateById(id: number, newSheet: Sheet): Promise<Sheet | null> {
