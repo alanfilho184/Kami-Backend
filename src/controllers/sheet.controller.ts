@@ -8,6 +8,14 @@ type PreparedSheet = {
     last_use: Date
 }
 
+type PreparedSheetUpdate = {
+    sheet_name: Sheet_Name
+    is_public: boolean
+    attributes: {}
+    legacy: false
+    last_use: Date
+}
+
 function toSheet(sheet: any): Sheet | null {
     try {
         return {
@@ -134,16 +142,28 @@ export default class SheetController {
         }
     }
 
-    async updateById(id: number, newSheet: Sheet): Promise<Sheet | null> {
+    async updateById(id: number, newSheet: PreparedSheetUpdate): Promise<Sheet | null> {
         return toSheet(
             await this.db.sheets.update({
                 where: {
                     id: id,
                 },
                 data: {
-                    sheet_name: newSheet.sheet_name.toString(),
-                    sheet_password: newSheet.sheet_password,
-                    attributes: newSheet.attributes
+                    sheet_name: newSheet.sheet_name.sheet_name,
+                    attributes: newSheet.attributes,
+                    is_public: newSheet.is_public,
+                    legacy: false,
+                    last_use: newSheet.last_use
+                },
+            }),
+        )
+    }
+
+    async deleteById(id: number): Promise<Sheet | null> {
+        return toSheet(
+            await this.db.sheets.delete({
+                where: {
+                    id: id,
                 },
             }),
         )

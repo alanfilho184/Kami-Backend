@@ -1,7 +1,7 @@
 import * as validations from './validations'
 import { PrismaClient } from '@prisma/client'
 
-export {}
+export { }
 
 declare global {
     type Db = PrismaClient
@@ -81,25 +81,26 @@ declare global {
         sheet_password: string
         is_public: boolean
         attributes: {
-            [section: string]: {
+            sections: [{
                 name: string,
-                position: string,
+                position: number,
                 type: Section_Type,
-                [attribute: string]: {
-                    value: string | number | string[]
-                    type: Attribute_Type
-                    position: number
+                attributes: [{
+                    name: string,
+                    position: number,
+                    type: Attribute_Type,
+                    value: string | number ,
                     config?: {
-                        width?: number
-                        height?: number
-                        max?: number
-                        min?: number
-                        step?: number
-                        max_length?: number
+                        width?: number,
+                        height?: number,
+                        max?: number,
+                        min?: number,
+                        step?: number,
+                        max_length?: number,
                         min_length?: number
                     }
-                }
-            }
+                }]
+            }]
         }
         legacy: boolean
         last_use: Date
