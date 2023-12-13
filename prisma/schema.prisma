@@ -78,6 +78,15 @@ model sheets {
     irt_sheets     irt_sheets[]
 }
 
+// model campaings {
+//     id          Int      @id @default(autoincrement())
+//     name        String   @unique
+//     description String
+//     thumbnail   String
+//     tags        String[]
+//     campaing    String
+// }
+
 model usage_info {
     id                 Int @id @default(autoincrement())
     bot_commands_count Int
@@ -101,7 +110,7 @@ model users_config {
     last_use       DateTime            @default(now()) @updatedAt @db.Timestamptz
 }
 
-model Tutorials {
+model tutorials {
     id          Int      @id @default(autoincrement())
     link        String   @unique
     title       String
@@ -111,7 +120,7 @@ model Tutorials {
     tutorial    String
 }
 
-model Commands {
+model commands {
     id          Int    @id @default(autoincrement())
     name        String @unique
     description String

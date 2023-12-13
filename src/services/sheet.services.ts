@@ -33,11 +33,13 @@ class SheetServices {
     private sheetController: SheetController
     private textRegex: RegExp
     private numberRegex: RegExp
+    private positiveNumberRegex: RegExp
     private imageRegex: RegExp
     constructor() {
         this.sheetController = new SheetController(db)
         this.textRegex = /^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ+#@$%&*{}()/.,;:?!'"-_| ]{1,}(?: [a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ+#@$%&*{}()/.,;:?!'"-_| ]+){0,}$/gim
-        this.numberRegex = /^[0-9]{1,}(?: [0-9]+){0,}$/gim
+        this.numberRegex = /^(-?[0-9]+)$/gim
+        this.positiveNumberRegex = /^([0-9]+)$/gim
         this.imageRegex = /https?:\/\/.*\.(?:png|jpg|jpeg|gif|svg|webp)/gi
     }
 
@@ -78,7 +80,7 @@ class SheetServices {
             user_id: userId,
             sheet_password: generateSheetPassword(),
             is_public: body.is_public ? body.is_public : false,
-            attributes: {},
+            attributes: { sections: [{ name: 'Info', type: 0, position: 0, attributes: [] }] },
             legacy: false,
             last_use: new Date()
         }
@@ -279,7 +281,7 @@ class SheetServices {
                             })
                         }
 
-                        if (!item.quantity.toString().match(this.numberRegex)) {
+                        if (!item.quantity.toString().match(this.positiveNumberRegex)) {
                             errors.push({
                                 field: 'attributes',
                                 message: 'Quantidade do item da lista inválido'
@@ -362,7 +364,7 @@ class SheetServices {
                         })
                     }
 
-                    if (!attributeValue.step.toString().match(this.numberRegex)) {
+                    if (!attributeValue.step.toString().match(this.positiveNumberRegex)) {
                         errors.push({
                             field: 'attributes',
                             message: 'Valor do atributo inválido'
