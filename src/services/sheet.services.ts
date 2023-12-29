@@ -236,7 +236,7 @@ class SheetServices {
                     }
                 }
                 else if (parseInt(`${attribute.type}`) === Attribute_Type.LIST) {
-                    const attributeValue = JSON.parse(`${attribute.value}`)
+                    const attributeValue: { items: Array<{ quantity: number, name: string }> } = attribute.value as any
 
                     if (!Array.isArray(attributeValue.items)) {
                         errors.push({
@@ -306,7 +306,7 @@ class SheetServices {
                     }
                 }
                 else if (parseInt(`${attribute.type}`) === Attribute_Type.BAR) {
-                    const attributeValue: { actual: number, min: number, max: number, step: number } = JSON.parse(`${attribute.value}`)
+                    const attributeValue: { actual: number, min: number, max: number, step: number } = attribute.value as any
 
                     if (attributeValue.actual.toString().length == 0) {
                         errors.push({
