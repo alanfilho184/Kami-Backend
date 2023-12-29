@@ -159,7 +159,7 @@ class SheetServices {
             }
 
             section.attributes.forEach((attribute) => {
-                if (attribute.type !== Attribute_Type.IMAGE) {
+                if (parseInt(`${attribute.type}`) !== Attribute_Type.IMAGE) {
                     if (attribute.name.length == 0) {
                         errors.push({
                             field: 'attributes',
@@ -189,7 +189,7 @@ class SheetServices {
                     }
                 }
 
-                if (attribute.type === Attribute_Type.TEXT) {
+                if (parseInt(`${attribute.type}`) === Attribute_Type.TEXT) {
                     attribute.value = `${attribute.value}`
                     if (attribute.value.length == 0) {
                         errors.push({
@@ -212,7 +212,7 @@ class SheetServices {
                         })
                     }
                 }
-                else if (attribute.type === Attribute_Type.NUMBER) {
+                else if (parseInt(`${attribute.type}`) === Attribute_Type.NUMBER) {
                     attribute.value = `${attribute.value}`
                     if (attribute.value.length == 0) {
                         errors.push({
@@ -235,7 +235,7 @@ class SheetServices {
                         })
                     }
                 }
-                else if (attribute.type === Attribute_Type.LIST) {
+                else if (parseInt(`${attribute.type}`) === Attribute_Type.LIST) {
                     const attributeValue = JSON.parse(`${attribute.value}`)
 
                     if (!Array.isArray(attributeValue.items)) {
@@ -289,7 +289,7 @@ class SheetServices {
                         }
                     })
                 }
-                else if (attribute.type === Attribute_Type.IMAGE) {
+                else if (parseInt(`${attribute.type}`) === Attribute_Type.IMAGE) {
                     attribute.value = `${attribute.value}`
                     if (attribute.value.length == 0) {
                         errors.push({
@@ -305,7 +305,7 @@ class SheetServices {
                         })
                     }
                 }
-                else if (attribute.type === Attribute_Type.BAR) {
+                else if (parseInt(`${attribute.type}`) === Attribute_Type.BAR) {
                     const attributeValue: { actual: number, min: number, max: number, step: number } = JSON.parse(`${attribute.value}`)
 
                     if (attributeValue.actual.toString().length == 0) {
