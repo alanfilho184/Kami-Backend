@@ -83,7 +83,7 @@ router.patch('/', async (req: Request, res: Response) => {
             res.status(200).json({ success: 'User updated successfully' })
 
             if (preparedUser.password) {
-                Events.emit('userPasswordChanged', req.user.id)
+                Events.emit('user-password-changed', req.user.id)
             }
             else {
                 const newUser: Express.Request['user'] = {
@@ -95,7 +95,7 @@ router.patch('/', async (req: Request, res: Response) => {
                     is_premium: req.user.is_premium
                 }
 
-                Events.emit('userChanged', newUser)
+                Events.emit('user-changed', newUser)
             }
         }
     } catch (err) {

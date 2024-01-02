@@ -4,6 +4,7 @@ import SheetController from '../controllers/sheet.controller'
 import logger from '../config/logger'
 import SheetServices from '../services/sheet.services'
 import { Discord_Id } from '../types/validations'
+import { default as Events } from '../websocket/events'
 
 const router = Router()
 const sheetController = new SheetController(db)
@@ -21,6 +22,12 @@ router.get('/one', async (req: Request, res: Response) => {
             if (sheet) {
                 if (sheet.user_id === req.user.id || sheet.is_public === true) {
                     sheet.user = req.user
+
+                    if (sheet.user_id !== req.user.id) {
+                        //@ts-expect-error
+                        delete sheet.sheet_password
+                    }
+
                     res.status(200).json({ sheet: sheet })
                 }
                 else {
@@ -36,6 +43,12 @@ router.get('/one', async (req: Request, res: Response) => {
             if (sheet) {
                 if (sheet.user_id === req.user.id || sheet.is_public === true) {
                     sheet.user = req.user
+
+                    if (sheet.user_id !== req.user.id) {
+                        //@ts-expect-error
+                        delete sheet.sheet_password
+                    }
+
                     res.status(200).json({ sheet: sheet })
                 }
                 else {
@@ -51,6 +64,12 @@ router.get('/one', async (req: Request, res: Response) => {
             if (sheet) {
                 if (sheet.user_id === req.user.id || sheet.is_public === true) {
                     sheet.user = req.user
+
+                    if (sheet.user_id !== req.user.id) {
+                        //@ts-expect-error
+                        delete sheet.sheet_password
+                    }
+
                     res.status(200).json({ sheet: sheet })
                 }
                 else {
@@ -138,6 +157,7 @@ router.put('/update', async (req: Request, res: Response) => {
                     const sheet = await sheetController.updateById(Number(req.body.id), preparedSheet)
 
                     if (sheet) {
+                        Events.emit('sheet-updated', req.body.socketIdentifier, sheet)
                         res.status(200).json({ sheet: sheet })
                     } else {
                         res.status(500).json({ error: 'Internal server error' })
@@ -168,6 +188,7 @@ router.delete('/delete', async (req: Request, res: Response) => {
                         const deletedSheet = await sheetController.deleteById(Number(req.query.id))
 
                         if (deletedSheet) {
+                            Events.emit('sheet-deleted', deletedSheet.id)
                             res.status(200).json({ sheet: deletedSheet })
                         } else {
                             res.status(500).json({ error: 'Internal server error' })

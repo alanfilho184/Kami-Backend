@@ -5,6 +5,7 @@ import { Server } from 'socket.io'
 import tutorialsCache from '../utils/cache/tutorials'
 import AuthServices from '../services/auth.services'
 import UserController from '../controllers/user.controller'
+import { loggerWebsocket } from '../middlewares/logger.middleware'
 
 const authServices = new AuthServices()
 const userController = new UserController(db)
@@ -15,6 +16,8 @@ export default function createSocket(server: any) {
             origin: config.default.CORS_ORIGIN,
         },
     })
+
+    io.use(loggerWebsocket)
 
     io.on('connection', socket => {
         socket.on('login', async data => {
@@ -36,6 +39,7 @@ export default function createSocket(server: any) {
                             }
 
                             socket.join(`${user.id}`)
+                            socket.data.user = user
                         } else {
                             return socket.disconnect()
                         }
@@ -55,13 +59,29 @@ export default function createSocket(server: any) {
 
             socket.emit('tutorialsFound', { tutorials: tutorials })
         })
+
+        socket.on('open-sheet', sheetId => {
+            socket.join(`sheet-${sheetId}`)
+        })
+
+        socket.on('close-sheet', sheetId => {
+            socket.leave(`sheet-${sheetId}`)
+        })
     })
 
-    Events.on('userPasswordChanged', (userId: number) => {
-        io.to(`${userId}`).emit('userPasswordChanged')
+    Events.on('user-password-changed', (userId: number) => {
+        io.to(`${userId}`).emit('user-password-changed')
     })
 
-    Events.on('userChanged', (user: Express.Request['user']) => {
-        io.to(`${user.id}`).emit('userChanged', { user: user })
+    Events.on('user-changed', (user: Express.Request['user']) => {
+        io.to(`${user.id}`).emit('user-changed', { user: user })
+    })
+
+    Events.on('sheet-updated', (socketIdentifier: string, sheet: Sheet) => {
+        io.to(`sheet-${sheet.id}`).emit('sheet-updated', sheet, socketIdentifier)
+    })
+
+    Events.on('sheet-deleted', (sheetId: number) => {
+        io.to(`sheet-${sheetId}`).emit('sheet-deleted', sheetId)
     })
 }
