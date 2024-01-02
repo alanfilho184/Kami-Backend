@@ -16,7 +16,8 @@ export async function verifyToken(req: Request, res: Response, next: NextFunctio
         if (req.headers.authorization) {
             if (req.headers.authorization === config.default.API_TOKEN) {
                 next()
-            } else {
+            }
+            else {
                 try {
                     const payload = authServices.verifyToken(req.headers.authorization)
 
@@ -36,16 +37,33 @@ export async function verifyToken(req: Request, res: Response, next: NextFunctio
 
                         next()
                     } else {
-                        return res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
+                        if (`${req.method}|${req.path.endsWith('/') ? req.path.substring(0, req.path.length - 1) : req.path}` == 'GET|/sheet/one') {
+                            next()
+                        }
+                        else {
+                            return res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
+                        }
                     }
                 } catch (err) {
-                    return res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
+                    if (`${req.method}|${req.path.endsWith('/') ? req.path.substring(0, req.path.length - 1) : req.path}` == 'GET|/sheet/one') {
+                        next()
+                    }
+                    else {
+                        return res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
+                    }
                 }
             }
-        } else {
-            return res.status(401).json({ title: 'Unathorized', message: 'Authorization token is required' })
         }
-    } else {
+        else {
+            if (`${req.method}|${req.path.endsWith('/') ? req.path.substring(0, req.path.length - 1) : req.path}` == 'GET|/sheet/one') {
+                next()
+            }
+            else {
+                return res.status(401).json({ title: 'Unathorized', message: 'Authorization token is required' })
+            }
+        }
+    }
+    else {
         next()
     }
 }
