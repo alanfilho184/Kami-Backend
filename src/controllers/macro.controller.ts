@@ -122,7 +122,7 @@ export default class MacroController {
                 id: id
             },
             data: {
-                macro_name: macro.macro_name.macro_name,
+                macro_name: `${macro.macro_name}`,
                 macros: macro.macros,
                 is_public: macro.is_public
             }
