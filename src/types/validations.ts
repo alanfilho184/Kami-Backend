@@ -98,4 +98,26 @@ class Sheet_Name {
     }
 }
 
-export { Discord_Id, Server_Id, Msg_Id, Channel_Id, Sheet_Name }
+class Macro_Name {
+    macro_name: string
+    constructor(macro_name: string) {
+        if (macro_name.length > 32) {
+            throw new ValidationError(`"${macro_name}" is not a valid macro_name`, `Exceeded the maximum of 32 characters`)
+        } else if (macro_name.match(/[ '$%]/g)) {
+            throw new ValidationError(`"${macro_name}" is not a valid macro_name`, `Contains invalid characters`)
+        } else {
+            this.macro_name = macro_name
+        }
+    }
+
+    static isValid(macro_name: string) {
+        try {
+            new Macro_Name(macro_name)
+            return true
+        } catch (err) {
+            return false
+        }
+    }
+}
+
+export { Discord_Id, Server_Id, Msg_Id, Channel_Id, Sheet_Name, Macro_Name }

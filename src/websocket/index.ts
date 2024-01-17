@@ -6,6 +6,7 @@ import tutorialsCache from '../utils/cache/tutorials'
 import AuthServices from '../services/auth.services'
 import UserController from '../controllers/user.controller'
 import { loggerWebsocket } from '../middlewares/logger.middleware'
+import { verifyTokenWebsocket } from '../middlewares/verifyToken.middleware'
 
 const authServices = new AuthServices()
 const userController = new UserController(db)
@@ -17,56 +18,33 @@ export default function createSocket(server: any) {
         },
     })
 
+    io.use(verifyTokenWebsocket)
     io.use(loggerWebsocket)
 
     io.on('connection', socket => {
-        socket.on('login', async data => {
-            if (data.token) {
-                try {
-                    const payload = authServices.verifyToken(data.token)
+        if (socket.data) {
+            socket.on('tutorialsSearch', search => {
+                const tutorials = tutorialsCache.searchTutorials(search)
 
-                    if (payload) {
-                        const payloadUser = await userController.getById(payload.id)
+                socket.emit('tutorialsFound', { tutorials: tutorials })
+            })
 
-                        if (payloadUser) {
-                            const user = {
-                                id: payloadUser.id,
-                                discord_id: payloadUser.discord_id,
-                                username: payloadUser.username,
-                                avatar_url: payloadUser.avatar,
-                                is_beta: payloadUser.is_beta,
-                                is_premium: payloadUser.is_premium,
-                            }
+            socket.on('open-sheet', sheetId => {
+                socket.join(`sheet-${sheetId}`)
+            })
 
-                            socket.join(`${user.id}`)
-                            socket.data.user = user
-                        } else {
-                            return socket.disconnect()
-                        }
-                    } else {
-                        return socket.disconnect()
-                    }
-                } catch (err) {
-                    return socket.disconnect()
-                }
-            } else {
-                return socket.disconnect()
-            }
-        })
+            socket.on('close-sheet', sheetId => {
+                socket.leave(`sheet-${sheetId}`)
+            })
 
-        socket.on('tutorialsSearch', search => {
-            const tutorials = tutorialsCache.searchTutorials(search)
+            socket.on('open-macro', macroId => {
+                socket.join(`macro-${macroId}`)
+            })
 
-            socket.emit('tutorialsFound', { tutorials: tutorials })
-        })
-
-        socket.on('open-sheet', sheetId => {
-            socket.join(`sheet-${sheetId}`)
-        })
-
-        socket.on('close-sheet', sheetId => {
-            socket.leave(`sheet-${sheetId}`)
-        })
+            socket.on('close-macro', macroId => {
+                socket.leave(`macro-${macroId}`)
+            })
+        }
     })
 
     Events.on('user-password-changed', (userId: number) => {
@@ -83,5 +61,13 @@ export default function createSocket(server: any) {
 
     Events.on('sheet-deleted', (sheetId: number) => {
         io.to(`sheet-${sheetId}`).emit('sheet-deleted', sheetId)
+    })
+
+    Events.on('macro-updated', (socketIdentifier: string, macro: Macro) => {
+        io.to(`macro-${macro.id}`).emit('macro-updated', macro, socketIdentifier)
+    })
+
+    Events.on('macro-deleted', (macroId: number) => {
+        io.to(`macro-${macroId}`).emit('macro-deleted', macroId)
     })
 }

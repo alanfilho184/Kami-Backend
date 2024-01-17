@@ -74,8 +74,7 @@ export function logger(req: Request, res: Response, next: NextFunction) {
 
 export function loggerWebsocket(socket: Socket, next: (Error?: Error) => void) {
     let time = DateTime.now().setZone('America/Fortaleza').toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)
-    // const info = `User: [ID: ${socket.data.id} Name: ${socket.data.user.username}]`
-    const info = `User: [ID: ${socket.id}]`
+    const info = `User: [ID: ${socket.data.id} Name: ${socket.data.username}]`
 
     logHandler.updateActualLogFile(`[ ${color.green(time)} ] - [ ${color.cyan(info)} ] - [ Websocket Connected ]\n`)
     console.log(`[ ${color.green(time)} ] - [ ${color.cyan(info)} ] - [ ${color.yellow('Websocket Connected')} ]\n`)

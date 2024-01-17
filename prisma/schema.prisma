@@ -33,6 +33,7 @@ model users {
     irt_sheets    irt_sheets[]
     sheets        sheets[]
     user_config   users_config[]
+    macros        macros[]
 }
 
 model blocked_users {
@@ -76,6 +77,16 @@ model sheets {
     is_public      Boolean        @default(false)
     user_config    users_config[]
     irt_sheets     irt_sheets[]
+}
+
+model macros {
+    id         Int      @id @default(autoincrement())
+    User_Id    users    @relation(fields: [user_id], references: [id])
+    user_id    Int
+    macro_name String
+    macros     Json
+    last_use   DateTime @default(now()) @updatedAt @db.Timestamptz
+    is_public  Boolean  @default(false)
 }
 
 // model campaings {

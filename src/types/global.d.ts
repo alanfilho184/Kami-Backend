@@ -30,12 +30,18 @@ declare global {
         BAR = 4
     }
 
+    enum Macro_Type {
+        NORMAL = 0,
+        MODIFIER_PLUS = 1,
+        MODIFIER_MINUS = 2,
+    }
+
     type Discord_Id = validations.Discord_Id
     type Server_Id = validations.Server_Id
     type Msg_Id = validations.Msg_Id
     type Channel_Id = validations.Channel_Id
-
     type Sheet_Name = validations.Sheet_Name
+    type Macro_Name = validations.Macro_Name
 
     type User = {
         id: number
@@ -89,7 +95,7 @@ declare global {
                     name: string,
                     position: number,
                     type: Attribute_Type,
-                    value: string | number ,
+                    value: string | number,
                     config?: {
                         width?: number,
                         height?: number,
@@ -110,6 +116,34 @@ declare global {
         id: number
         user_id: number
         sheet_name: Sheet_Name
+    }
+
+    type Macro = {
+        id: number
+        user_id: number
+        user?: Express.Request['user']
+        macro_name: Macro_Name
+        macros: {
+            sections: [{
+                name: string,
+                position: number,
+                macros: [{
+                    name: string,
+                    position: number,
+                    value: string
+                    type: Macro_Type
+                }]
+            }]
+        }
+        is_public: boolean
+        last_use: Date
+    }
+
+    type Macro_Head = {
+        id: number
+        user_id: number
+        sheet_id?: number
+        macro_name: string
     }
 
     type Usage_Info = {

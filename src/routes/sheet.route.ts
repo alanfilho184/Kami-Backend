@@ -112,6 +112,7 @@ router.post('/create', async (req: Request, res: Response) => {
     try {
         if (req.user) {
             if (req.body.sheetName) {
+                req.body.user_id = req.user.id
                 const validationErrors = await sheetServices.validate(req.body)
 
                 if (validationErrors.length > 0) {
