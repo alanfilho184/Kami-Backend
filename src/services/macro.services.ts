@@ -27,11 +27,12 @@ class MacroServices {
     private textRegex: RegExp
     constructor() {
         this.macroController = new MacroController(db)
-        this.textRegex = /^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ+#@$%&*{}()/.,;:?!'"-_| ]{1,}(?: [a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ+#@$%&*{}()/.,;:?!'"-_| ]+){0,}$/gim
+        this.textRegex =
+            /^[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ+#@$%&*{}()/.,;:?!'"-_| ]{1,}(?: [a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ+#@$%&*{}()/.,;:?!'"-_| ]+){0,}$/gim
     }
 
-    async validate(body: any): Promise<Array<{ field: string, message: string }>> {
-        const errors: Array<{ field: string, message: string }> = []
+    async validate(body: any): Promise<Array<{ field: string; message: string }>> {
+        const errors: Array<{ field: string; message: string }> = []
 
         if (!body.macroName) {
             errors.push({ field: 'macro_name', message: 'Faltando nome do macro' })
@@ -41,7 +42,7 @@ class MacroServices {
             errors.push({ field: 'macro_name', message: 'Nome do macro inválido' })
         }
 
-        const macro = await this.macroController.getByUserIdAndMacroName(body.user_id, body.macro_name)
+        const macro = await this.macroController.getByUserIdAndMacroName(body.user_id, `${body.macro_name}`)
 
         if (macro) {
             errors.push({ field: 'macro_name', message: 'Já existe um macro com esse nome' })
@@ -55,12 +56,12 @@ class MacroServices {
             user_id: userId,
             macro_name: new Macro_Name(body.macroName),
             macros: { sections: [{ name: 'Macros', position: 0, macros: [] }] },
-            is_public: false
+            is_public: false,
         }
     }
 
-    async validateUpdate(body: Macro): Promise<Array<{ field: string, message: string }>> {
-        const errors: Array<{ field: string, message: string }> = []
+    async validateUpdate(body: Macro): Promise<Array<{ field: string; message: string }>> {
+        const errors: Array<{ field: string; message: string }> = []
 
         if (!body.macro_name) {
             errors.push({ field: 'macro_name', message: 'Faltando nome do macro' })
@@ -80,8 +81,7 @@ class MacroServices {
 
         if (macroExists === null) {
             errors.push({ field: 'macro_name', message: 'Macro não existe' })
-        }
-        else {
+        } else {
             if (macroExists.user_id !== body.user_id) {
                 errors.push({ field: 'macro_name', message: 'Macro não pertence ao usuário' })
             }
@@ -91,57 +91,57 @@ class MacroServices {
             if (section.name.length == 0) {
                 errors.push({
                     field: 'sections',
-                    message: 'Nome da seção inválido'
+                    message: 'Nome da seção inválido',
                 })
             }
 
             if (section.name.length < 2 || section.name.length > 20) {
                 errors.push({
                     field: 'sections',
-                    message: 'Nome da seção deve ter entre 2 e 20 caracteres'
+                    message: 'Nome da seção deve ter entre 2 e 20 caracteres',
                 })
             }
 
             if (!section.name.match(this.textRegex)) {
                 errors.push({
                     field: 'sections',
-                    message: 'Nome da seção inválido'
+                    message: 'Nome da seção inválido',
                 })
             }
 
             if (body.macros.sections.find(s => s.name === section.name && s.position !== section.position)) {
                 errors.push({
                     field: 'sections',
-                    message: 'Nome da seção duplicado'
+                    message: 'Nome da seção duplicado',
                 })
             }
 
-            section.macros.forEach((macro) => {
+            section.macros.forEach(macro => {
                 if (macro.name.length == 0) {
                     errors.push({
                         field: 'macros',
-                        message: 'Nome do macro não pode ser vazio'
+                        message: 'Nome do macro não pode ser vazio',
                     })
                 }
 
                 if (macro.name.length > 32) {
                     errors.push({
                         field: 'macros',
-                        message: 'Nome do macro deve ter no máximo 32 caracteres'
+                        message: 'Nome do macro deve ter no máximo 32 caracteres',
                     })
                 }
 
                 if (!macro.name.match(this.textRegex)) {
                     errors.push({
                         field: 'macros',
-                        message: 'Nome do macro inválido'
+                        message: 'Nome do macro inválido',
                     })
                 }
 
                 if (body.macros.sections[sectionIndex].macros.find(a => a.name === macro.name && a.position !== macro.position)) {
                     errors.push({
                         field: 'macros',
-                        message: 'Nome do macro duplicado'
+                        message: 'Nome do macro duplicado',
                     })
                 }
 
@@ -150,21 +150,21 @@ class MacroServices {
                 if (macro.value.length == 0) {
                     errors.push({
                         field: 'macros',
-                        message: 'Valor do macro não pode ser vazio'
+                        message: 'Valor do macro não pode ser vazio',
                     })
                 }
 
                 if (macro.value.length > 128) {
                     errors.push({
                         field: 'macros',
-                        message: 'Valor do macro deve ter no máximo 128 caracteres'
+                        message: 'Valor do macro deve ter no máximo 128 caracteres',
                     })
                 }
 
                 if (!validateDiceString(macro.value)) {
                     errors.push({
                         field: 'macros',
-                        message: 'Valor do macro inválido'
+                        message: 'Valor do macro inválido',
                     })
                 }
             })
@@ -177,7 +177,7 @@ class MacroServices {
         return {
             macro_name: body.macro_name,
             macros: body.macros,
-            is_public: body.is_public
+            is_public: body.is_public,
         }
     }
 }

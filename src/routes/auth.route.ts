@@ -69,14 +69,12 @@ router.post('/discord/sync', async (req: Request, res: Response) => {
                         error: 'Discord account already linked',
                     })
                     return
-                }
-                else if (discordUserAlreadyOnDb && !discordUserAlreadyOnDb.email) {
+                } else if (discordUserAlreadyOnDb && !discordUserAlreadyOnDb.email) {
                     await userController.mergeByIdAndDiscordId(req.user, discordUserAlreadyOnDb)
 
                     const newUser = { ...req.user, discord_id: user.id }
                     Events.emit('userChanged', newUser)
-                }
-                else if (!discordUserAlreadyOnDb) {
+                } else if (!discordUserAlreadyOnDb) {
                     await userController.updateById(req.user.id, { discord_id: user.id })
 
                     res.status(200).json({ success: 'Discord account linked successfully' })
@@ -84,8 +82,7 @@ router.post('/discord/sync', async (req: Request, res: Response) => {
                     const newUser = { ...req.user, discord_id: user.id }
                     Events.emit('userChanged', newUser)
                 }
-            }
-            else {
+            } else {
                 res.status(400).json({
                     error: 'Invalid Discord ID',
                 })
@@ -95,7 +92,6 @@ router.post('/discord/sync', async (req: Request, res: Response) => {
                 error: 'Invalid code',
             })
         }
-
     } catch (err) {
         logger.registerError(err)
         res.status(500).end()

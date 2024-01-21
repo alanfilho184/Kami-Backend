@@ -15,7 +15,7 @@ class AuthServices {
         this.userController = new UserController(db)
     }
 
-    async getDiscordUserByCode(code: string){
+    async getDiscordUserByCode(code: string) {
         const oauth = new DiscordOauth2()
 
         const params = new URLSearchParams()

@@ -47,8 +47,8 @@ function buildDiceObj(dice: string) {
         sum: diceSum.reduce((a, b) => a + b, 0),
         advantage: dice.indexOf('v') != -1 ? Math.max(...diceAdvantage) : 0,
         disadvantage: instanceCounter(dice, 'd') > 1 ? Math.min(...diceDisadvantage) : 0,
-        greater: dice.indexOf('>') != -1 ? diceGreater.filter((roll) => roll > Number(dice.split('>')[1])) : null,
-        less: dice.indexOf('<') != -1 ? diceGreater.filter((roll) => roll < Number(dice.split('<')[1])) : null,
+        greater: dice.indexOf('>') != -1 ? diceGreater.filter(roll => roll > Number(dice.split('>')[1])) : null,
+        less: dice.indexOf('<') != -1 ? diceGreater.filter(roll => roll < Number(dice.split('<')[1])) : null,
         greaterQuantity: diceObj.greater != null ? diceObj.greater.length : null,
         lessQuantity: diceObj.less != null ? diceObj.less.length : null,
         greaterSum: diceObj.greater != null ? diceObj.greater.reduce((a: number, b: number) => a + b, 0) : null,
@@ -58,10 +58,9 @@ function buildDiceObj(dice: string) {
             advantage: dice.indexOf('v') != -1 ? true : false,
             disadvantage: instanceCounter(dice, 'd') > 1 ? true : false,
             greater: dice.indexOf('>') != -1 ? true : false,
-            less: dice.indexOf('<') != -1 ? true : false
-        }
+            less: dice.indexOf('<') != -1 ? true : false,
+        },
     }
-
 
     return diceObj
 }
@@ -76,7 +75,7 @@ function calculateOperation(operationsArray: string[]) {
 
         if (typeof firstOperand == 'object' && typeof secondOperand == 'object') {
             let firstOperandModifer = 'sum'
-            for (let modifer of Object.keys(firstOperand)) {
+            for (const modifer of Object.keys(firstOperand)) {
                 if (['advantage', 'disadvantage', 'greaterSum', 'lessSum'].includes(modifer)) {
                     if (firstOperand[modifer] != 0 && firstOperand[modifer] != null) {
                         firstOperandModifer = modifer
@@ -86,7 +85,7 @@ function calculateOperation(operationsArray: string[]) {
             }
 
             let secondOperandModifer = 'sum'
-            for (let modifer of Object.keys(secondOperand)) {
+            for (const modifer of Object.keys(secondOperand)) {
                 if (['advantage', 'disadvantage', 'greaterSum', 'lessSum'].includes(modifer)) {
                     if (secondOperand[modifer] != 0 && secondOperand[modifer] != null) {
                         secondOperandModifer = modifer
@@ -97,20 +96,16 @@ function calculateOperation(operationsArray: string[]) {
 
             if (operator == '*') {
                 sumResult = firstOperand[firstOperandModifer] * secondOperand[secondOperandModifer]
-            }
-            else if (operator == '/') {
+            } else if (operator == '/') {
                 sumResult = firstOperand[firstOperandModifer] / secondOperand[secondOperandModifer]
-            }
-            else if (operator == '+') {
+            } else if (operator == '+') {
                 sumResult = firstOperand[firstOperandModifer] + secondOperand[secondOperandModifer]
-            }
-            else if (operator == '-') {
+            } else if (operator == '-') {
                 sumResult = firstOperand[firstOperandModifer] - secondOperand[secondOperandModifer]
             }
-        }
-        else if (typeof firstOperand == 'object' && typeof secondOperand == 'string') {
+        } else if (typeof firstOperand == 'object' && typeof secondOperand == 'string') {
             let firstOperandModifer = 'sum'
-            for (let modifer of Object.keys(firstOperand)) {
+            for (const modifer of Object.keys(firstOperand)) {
                 if (['advantage', 'disadvantage', 'greaterSum', 'lessSum'].includes(modifer)) {
                     if (firstOperand[modifer] != 0 && firstOperand[modifer] != null) {
                         firstOperandModifer = modifer
@@ -121,20 +116,16 @@ function calculateOperation(operationsArray: string[]) {
 
             if (operator == '*') {
                 sumResult = firstOperand[firstOperandModifer] * parseInt(secondOperand)
-            }
-            else if (operator == '/') {
+            } else if (operator == '/') {
                 sumResult = firstOperand[firstOperandModifer] / parseInt(secondOperand)
-            }
-            else if (operator == '+') {
+            } else if (operator == '+') {
                 sumResult = firstOperand[firstOperandModifer] + parseInt(secondOperand)
-            }
-            else if (operator == '-') {
+            } else if (operator == '-') {
                 sumResult = firstOperand[firstOperandModifer] - parseInt(secondOperand)
             }
-        }
-        else if (typeof firstOperand == 'string' && typeof secondOperand == 'object') {
+        } else if (typeof firstOperand == 'string' && typeof secondOperand == 'object') {
             let secondOperandModifer = 'sum'
-            for (let modifer of Object.keys(secondOperand)) {
+            for (const modifer of Object.keys(secondOperand)) {
                 if (['advantage', 'disadvantage', 'greaterSum', 'lessSum'].includes(modifer)) {
                     if (secondOperand[modifer] != 0 && secondOperand[modifer] != null) {
                         secondOperandModifer = modifer
@@ -145,46 +136,37 @@ function calculateOperation(operationsArray: string[]) {
 
             if (operator == '*') {
                 sumResult = parseInt(firstOperand) * secondOperand[secondOperandModifer]
-            }
-            else if (operator == '/') {
+            } else if (operator == '/') {
                 sumResult = parseInt(firstOperand) / secondOperand[secondOperandModifer]
-            }
-            else if (operator == '+') {
+            } else if (operator == '+') {
                 sumResult = parseInt(firstOperand) + secondOperand[secondOperandModifer]
-            }
-            else if (operator == '-') {
+            } else if (operator == '-') {
                 sumResult = parseInt(firstOperand) - secondOperand[secondOperandModifer]
             }
-        }
-        else if (typeof firstOperand == 'string' && typeof secondOperand == 'string') {
+        } else if (typeof firstOperand == 'string' && typeof secondOperand == 'string') {
             if (operator == '*') {
                 sumResult = parseInt(firstOperand) * parseInt(secondOperand)
-            }
-            else if (operator == '/') {
+            } else if (operator == '/') {
                 sumResult = parseInt(firstOperand) / parseInt(secondOperand)
-            }
-            else if (operator == '+') {
+            } else if (operator == '+') {
                 sumResult = parseInt(firstOperand) + parseInt(secondOperand)
-            }
-            else if (operator == '-') {
+            } else if (operator == '-') {
                 sumResult = parseInt(firstOperand) - parseInt(secondOperand)
             }
-        }
-        else {
+        } else {
             throw new Error('Invalid operation')
         }
 
         if (sumResult != null) {
             return sumResult
         }
-    }
-    else if (operationsArray.length > 3) {
-        let result = null;
+    } else if (operationsArray.length > 3) {
+        let result = null
 
         for (let i = 1; i < operationsArray.length; i += 2) {
-            let firstOperand: any = result !== null ? result : operationsArray[i - 1];
-            const operator = operationsArray[i];
-            let secondOperand = operationsArray[i + 1];
+            let firstOperand: any = result !== null ? result : operationsArray[i - 1]
+            const operator = operationsArray[i]
+            let secondOperand = operationsArray[i + 1]
 
             if (typeof firstOperand != 'object') {
                 firstOperand = `${firstOperand}`
@@ -194,11 +176,11 @@ function calculateOperation(operationsArray: string[]) {
                 secondOperand = `${secondOperand}`
             }
 
-            let sumResult = null;
+            let sumResult = null
 
             if (typeof firstOperand == 'object' && typeof secondOperand == 'object') {
                 let firstOperandModifer = 'sum'
-                for (let modifer of Object.keys(firstOperand)) {
+                for (const modifer of Object.keys(firstOperand)) {
                     if (['advantage', 'disadvantage', 'greaterSum', 'lessSum'].includes(modifer)) {
                         if (firstOperand[modifer] != 0 && firstOperand[modifer] != null && firstOperand[modifer] != null) {
                             firstOperandModifer = modifer
@@ -208,7 +190,7 @@ function calculateOperation(operationsArray: string[]) {
                 }
 
                 let secondOperandModifer = 'sum'
-                for (let modifer of Object.keys(secondOperand)) {
+                for (const modifer of Object.keys(secondOperand)) {
                     if (['advantage', 'disadvantage', 'greaterSum', 'lessSum'].includes(modifer)) {
                         if (secondOperand[modifer] != 0 && secondOperand[modifer] != null && secondOperand[modifer] != null) {
                             secondOperandModifer = modifer
@@ -219,20 +201,16 @@ function calculateOperation(operationsArray: string[]) {
 
                 if (operator == '*') {
                     sumResult = firstOperand[firstOperandModifer] * secondOperand[secondOperandModifer]
-                }
-                else if (operator == '/') {
+                } else if (operator == '/') {
                     sumResult = firstOperand[firstOperandModifer] / secondOperand[secondOperandModifer]
-                }
-                else if (operator == '+') {
+                } else if (operator == '+') {
                     sumResult = firstOperand[firstOperandModifer] + secondOperand[secondOperandModifer]
-                }
-                else if (operator == '-') {
+                } else if (operator == '-') {
                     sumResult = firstOperand[firstOperandModifer] - secondOperand[secondOperandModifer]
                 }
-            }
-            else if (typeof firstOperand == 'object' && typeof secondOperand == 'string') {
+            } else if (typeof firstOperand == 'object' && typeof secondOperand == 'string') {
                 let firstOperandModifer = 'sum'
-                for (let modifer of Object.keys(firstOperand)) {
+                for (const modifer of Object.keys(firstOperand)) {
                     if (['advantage', 'disadvantage', 'greaterSum', 'lessSum'].includes(modifer)) {
                         if (firstOperand[modifer] != 0 && firstOperand[modifer] != null) {
                             firstOperandModifer = modifer
@@ -243,20 +221,16 @@ function calculateOperation(operationsArray: string[]) {
 
                 if (operator == '*') {
                     sumResult = firstOperand[firstOperandModifer] * parseInt(secondOperand)
-                }
-                else if (operator == '/') {
+                } else if (operator == '/') {
                     sumResult = firstOperand[firstOperandModifer] / parseInt(secondOperand)
-                }
-                else if (operator == '+') {
+                } else if (operator == '+') {
                     sumResult = firstOperand[firstOperandModifer] + parseInt(secondOperand)
-                }
-                else if (operator == '-') {
+                } else if (operator == '-') {
                     sumResult = firstOperand[firstOperandModifer] - parseInt(secondOperand)
                 }
-            }
-            else if (typeof firstOperand == 'string' && typeof secondOperand == 'object') {
+            } else if (typeof firstOperand == 'string' && typeof secondOperand == 'object') {
                 let secondOperandModifer = 'sum'
-                for (let modifer of Object.keys(secondOperand)) {
+                for (const modifer of Object.keys(secondOperand)) {
                     if (['advantage', 'disadvantage', 'greaterSum', 'lessSum'].includes(modifer)) {
                         if (secondOperand[modifer] != 0 && secondOperand[modifer] != null) {
                             secondOperandModifer = modifer
@@ -267,58 +241,51 @@ function calculateOperation(operationsArray: string[]) {
 
                 if (operator == '*') {
                     sumResult = parseInt(firstOperand) * secondOperand[secondOperandModifer]
-                }
-                else if (operator == '/') {
+                } else if (operator == '/') {
                     sumResult = parseInt(firstOperand) / secondOperand[secondOperandModifer]
-                }
-                else if (operator == '+') {
+                } else if (operator == '+') {
                     sumResult = parseInt(firstOperand) + secondOperand[secondOperandModifer]
-                }
-                else if (operator == '-') {
+                } else if (operator == '-') {
                     sumResult = parseInt(firstOperand) - secondOperand[secondOperandModifer]
                 }
-            }
-            else if (typeof firstOperand == 'string' && typeof secondOperand == 'string') {
+            } else if (typeof firstOperand == 'string' && typeof secondOperand == 'string') {
                 if (operator == '*') {
                     sumResult = parseInt(firstOperand) * parseInt(secondOperand)
-                }
-                else if (operator == '/') {
+                } else if (operator == '/') {
                     sumResult = parseInt(firstOperand) / parseInt(secondOperand)
-                }
-                else if (operator == '+') {
+                } else if (operator == '+') {
                     sumResult = parseInt(firstOperand) + parseInt(secondOperand)
-                }
-                else if (operator == '-') {
+                } else if (operator == '-') {
                     sumResult = parseInt(firstOperand) - parseInt(secondOperand)
                 }
-            }
-            else {
+            } else {
                 throw new Error('Invalid operation')
             }
 
             if (sumResult !== null) {
-                result = sumResult;
+                result = sumResult
             }
         }
 
         return result
-    }
-    else {
+    } else {
         throw new Error('Invalid operation')
     }
 }
 
 function validateDiceString(dice: string) {
     try {
-        const regex = /^(\d{1,3}|[d*v<>+\-*/()\[\]{}])+$/;
-        let regexPass = regex.test(dice);
+        const regex = /^(\d{1,3}|[d*v<>+\-*/()\[\]{}])+$/
+        const regexPass = regex.test(dice)
 
         if (regexPass) {
             const diceArray = dice.split(/(?=[+-/*()[\]{}])|(?<=[+-/*()[\]{}])/gi)
             let sizePass = true
 
             diceArray.forEach((dice, index) => {
-                if (dice.startsWith('d') || dice.startsWith('D')) { dice = '1' + dice }
+                if (dice.startsWith('d') || dice.startsWith('D')) {
+                    dice = '1' + dice
+                }
 
                 if (!dice.match(/(?<=[+-/*()[\]{}])|(?=[+-/*()[\]{}])/gi)) {
                     try {
@@ -327,110 +294,137 @@ function validateDiceString(dice: string) {
 
                             if (diceSplit.length == 1) {
                                 if (diceSplit[0].indexOf('>') != -1 && diceSplit[0].indexOf('<') == -1) {
-                                    let diceSplitOp = diceSplit[0].split('>')
-                                    
-                                    if (Number(diceSplitOp[1]) > 100000 || Number(diceSplitOp[0]) > 100000 || Number(diceSplitOp[0]) == 0 || Number(diceSplitOp[1]) == 0) {
+                                    const diceSplitOp = diceSplit[0].split('>')
+                                    if (
+                                        Number(diceSplitOp[1]) > 100000 ||
+                                        Number(diceSplitOp[0]) > 100000 ||
+                                        Number(diceSplitOp[0]) == 0 ||
+                                        Number(diceSplitOp[1]) == 0
+                                    ) {
                                         sizePass = false
                                         return
                                     }
-                                }
-                                else if (diceSplit[0].indexOf('>') == -1 && diceSplit[0].indexOf('<') != -1) {
-                                    let diceSplitOp = diceSplit[0].split('<')
-                                    if (Number(diceSplitOp[1]) > 100000 || Number(diceSplitOp[0]) > 100000 || Number(diceSplitOp[0]) == 0 || Number(diceSplitOp[1]) == 0) {
+                                } else if (diceSplit[0].indexOf('>') == -1 && diceSplit[0].indexOf('<') != -1) {
+                                    const diceSplitOp = diceSplit[0].split('<')
+                                    if (
+                                        Number(diceSplitOp[1]) > 100000 ||
+                                        Number(diceSplitOp[0]) > 100000 ||
+                                        Number(diceSplitOp[0]) == 0 ||
+                                        Number(diceSplitOp[1]) == 0
+                                    ) {
                                         sizePass = false
                                         return
                                     }
-                                }
-                                else if (diceSplit[0].indexOf('>') != -1 && diceSplit[0].indexOf('<') != -1) {
+                                } else if (diceSplit[0].indexOf('>') != -1 && diceSplit[0].indexOf('<') != -1) {
                                     let diceSplitOp = diceSplit[0].split('>')
 
-                                    if (Number(diceSplitOp[1].split('<')[0]) > 100000 || Number(diceSplitOp[0]) > 100000 || Number(diceSplitOp[0]) == 0 || Number(diceSplitOp[1].split('<')[0]) == 0) {
+                                    if (
+                                        Number(diceSplitOp[1].split('<')[0]) > 100000 ||
+                                        Number(diceSplitOp[0]) > 100000 ||
+                                        Number(diceSplitOp[0]) == 0 ||
+                                        Number(diceSplitOp[1].split('<')[0]) == 0
+                                    ) {
                                         sizePass = false
                                         return
                                     }
 
                                     diceSplitOp = diceSplit[0].split('<')
 
-                                    if (Number(diceSplitOp[1].split('>')[0]) > 100000 || Number(diceSplitOp[0]) > 100000 || Number(diceSplitOp[0]) == 0 || Number(diceSplitOp[1].split('>')[0]) == 0) {
+                                    if (
+                                        Number(diceSplitOp[1].split('>')[0]) > 100000 ||
+                                        Number(diceSplitOp[0]) > 100000 ||
+                                        Number(diceSplitOp[0]) == 0 ||
+                                        Number(diceSplitOp[1].split('>')[0]) == 0
+                                    ) {
                                         sizePass = false
                                         return
                                     }
-                                }
-                                else {
+                                } else {
                                     if (Number(diceSplit[0]) > 100000 || Number(diceSplit[0]) == 0) {
                                         sizePass = false
                                         return
                                     }
                                 }
-                            }
-                            else if (diceSplit.length == 2) {
+                            } else if (diceSplit.length == 2) {
                                 if (Number(diceSplit[0]) > 1000 || Number(diceSplit[0]) == 0) {
                                     sizePass = false
                                     return
-                                }
-                                else if (diceSplit[1].indexOf('>') != -1 && diceSplit[1].indexOf('<') == -1) {
-                                    let diceSplitOp = diceSplit[1].split('>')
+                                } else if (diceSplit[1].indexOf('>') != -1 && diceSplit[1].indexOf('<') == -1) {
+                                    const diceSplitOp = diceSplit[1].split('>')
 
-                                    if (Number(diceSplitOp[0]) > 1000 || Number(diceSplitOp[1]) > 100000 || Number(diceSplitOp[0]) == 0 || Number(diceSplitOp[1]) == 0) {
+                                    if (
+                                        Number(diceSplitOp[0]) > 1000 ||
+                                        Number(diceSplitOp[1]) > 100000 ||
+                                        Number(diceSplitOp[0]) == 0 ||
+                                        Number(diceSplitOp[1]) == 0
+                                    ) {
                                         sizePass = false
                                         return
                                     }
-                                }
-                                else if (diceSplit[1].indexOf('>') == -1 && diceSplit[1].indexOf('<') != -1) {
-                                    let diceSplitOp = diceSplit[1].split('<')
+                                } else if (diceSplit[1].indexOf('>') == -1 && diceSplit[1].indexOf('<') != -1) {
+                                    const diceSplitOp = diceSplit[1].split('<')
 
-                                    if (Number(diceSplitOp[0]) > 1000 || Number(diceSplitOp[1]) > 100000 || Number(diceSplitOp[0]) == 0 || Number(diceSplitOp[1]) == 0) {
+                                    if (
+                                        Number(diceSplitOp[0]) > 1000 ||
+                                        Number(diceSplitOp[1]) > 100000 ||
+                                        Number(diceSplitOp[0]) == 0 ||
+                                        Number(diceSplitOp[1]) == 0
+                                    ) {
                                         sizePass = false
                                         return
                                     }
-                                }
-                                else if (diceSplit[1].indexOf('>') != -1 && diceSplit[1].indexOf('<') != -1) {
+                                } else if (diceSplit[1].indexOf('>') != -1 && diceSplit[1].indexOf('<') != -1) {
                                     let diceSplitOp = diceSplit[1].split('>')
 
-                                    if (Number(diceSplitOp[0]) > 1000 || Number(diceSplitOp[1]) > 100000 || Number(diceSplitOp[0]) == 0 || Number(diceSplitOp[1]) == 0) {
+                                    if (
+                                        Number(diceSplitOp[0]) > 1000 ||
+                                        Number(diceSplitOp[1]) > 100000 ||
+                                        Number(diceSplitOp[0]) == 0 ||
+                                        Number(diceSplitOp[1]) == 0
+                                    ) {
                                         sizePass = false
                                         return
                                     }
 
                                     diceSplitOp = diceSplit[1].split('<')
 
-                                    if (Number(diceSplitOp[0]) > 1000 || Number(diceSplitOp[1]) > 100000 || Number(diceSplitOp[0]) == 0 || Number(diceSplitOp[1]) == 0) {
+                                    if (
+                                        Number(diceSplitOp[0]) > 1000 ||
+                                        Number(diceSplitOp[1]) > 100000 ||
+                                        Number(diceSplitOp[0]) == 0 ||
+                                        Number(diceSplitOp[1]) == 0
+                                    ) {
                                         sizePass = false
                                         return
                                     }
-                                }
-                                else {
+                                } else {
                                     if (Number(diceSplit[1]) > 1000 || Number(diceSplit[1]) == 0) {
                                         sizePass = false
                                         return
                                     }
                                 }
-                            }
-                            else if (diceSplit.length == 3) {
+                            } else if (diceSplit.length == 3) {
                                 if (Number(diceSplit[0]) > 1000 || Number(diceSplit[0]) == 0) {
                                     sizePass = false
                                     return
-                                }
-                                else if (Number(diceSplit[1].replace(/[<>dv]/gi, '')) > 1000 || Number(diceSplit[1].replace(/[<>dv]/gi, '')) == 0) {
+                                } else if (Number(diceSplit[1].replace(/[<>dv]/gi, '')) > 1000 || Number(diceSplit[1].replace(/[<>dv]/gi, '')) == 0) {
                                     sizePass = false
                                     return
                                 }
 
                                 if (diceSplit[2].indexOf('>') != -1 && diceSplit[2].indexOf('<') == -1) {
-                                    let diceSplitOp = diceSplit[2].split('>')
+                                    const diceSplitOp = diceSplit[2].split('>')
                                     if (Number(diceSplitOp[1]) > 100000 || Number(diceSplitOp[1]) == 0) {
                                         sizePass = false
                                         return
                                     }
-                                }
-                                else if (diceSplit[2].indexOf('>') == -1 && diceSplit[2].indexOf('<') != -1) {
-                                    let diceSplitOp = diceSplit[2].split('<')
+                                } else if (diceSplit[2].indexOf('>') == -1 && diceSplit[2].indexOf('<') != -1) {
+                                    const diceSplitOp = diceSplit[2].split('<')
                                     if (Number(diceSplitOp[1]) > 100000 || Number(diceSplitOp[1]) == 0) {
                                         sizePass = false
                                         return
                                     }
-                                }
-                                else if (diceSplit[2].indexOf('>') != -1 && diceSplit[2].indexOf('<') != -1) {
+                                } else if (diceSplit[2].indexOf('>') != -1 && diceSplit[2].indexOf('<') != -1) {
                                     let diceSplitOp = diceSplit[2].split('>')
 
                                     if (Number(diceSplitOp[1].split('<')[0]) > 100000 || Number(diceSplitOp[1].split('<')[0]) == 0) {
@@ -445,13 +439,11 @@ function validateDiceString(dice: string) {
                                         return
                                     }
                                 }
-                            }
-                            else if (diceSplit.length > 3) {
+                            } else if (diceSplit.length > 3) {
                                 sizePass = false
                                 return
                             }
-                        }
-                        else {
+                        } else {
                             if (dice[0] == 'd' || dice[0] == 'D') {
                                 dice = '1' + dice
                                 diceArray[index] = dice
@@ -463,25 +455,21 @@ function validateDiceString(dice: string) {
                                 if (Number(diceSplit[0]) > 1000) {
                                     sizePass = false
                                     return
-                                }
-                                else if (Number(diceSplit[1].replace(/[<>dv]/gi, '')) > 1000) {
+                                } else if (Number(diceSplit[1].replace(/[<>dv]/gi, '')) > 1000) {
                                     sizePass = false
                                     return
                                 }
-                            }
-                            else if (diceSplit.length == 3) {
+                            } else if (diceSplit.length == 3) {
                                 if (Number(diceSplit[0]) > 1000) {
                                     sizePass = false
                                     return
-                                }
-                                else if (Number(diceSplit[1].replace(/[<>dv]/gi, '')) > 1000) {
+                                } else if (Number(diceSplit[1].replace(/[<>dv]/gi, '')) > 1000) {
                                     sizePass = false
                                     return
                                 }
                             }
                         }
-                    }
-                    catch (err) {
+                    } catch (err) {
                         throw err
                     }
                 }
@@ -489,16 +477,13 @@ function validateDiceString(dice: string) {
 
             if (sizePass) {
                 return true
-            }
-            else {
+            } else {
                 return false
             }
-        }
-        else {
+        } else {
             return false
         }
-    }
-    catch (err) {
+    } catch (err) {
         return false
     }
 }
@@ -509,8 +494,7 @@ function formatDiceStringOutput(unformattedDices: any) {
         for (let i = 0; i < unformattedDices.diceArray.length; i++) {
             if (unformattedDices.diceArray[i].match(/(?<=[+-/*()[\]{}])|(?=[+-/*()[\]{}])/gi)) {
                 formattedString += unformattedDices.diceArray[i]
-            }
-            else {
+            } else {
                 if (unformattedDices.diceArray[i][0] == 'd' || unformattedDices.diceArray[i][0] == 'D') {
                     unformattedDices.diceArray[i] = '1' + unformattedDices.diceArray[i]
                 }
@@ -525,32 +509,26 @@ function formatDiceStringOutput(unformattedDices: any) {
             for (let i = 0; i < diceArray.length; i++) {
                 if (Array.isArray(diceArray[i])) {
                     formatDiceResolvedRecursivly(diceArray[i])
-                }
-                else {
+                } else {
                     if (typeof diceArray[i] == 'object') {
                         if (diceArray[i].has.advantage) {
                             formattedString += `[${diceArray[i].results.join(', ')}]v`
                             formattedString += ` => ${diceArray[i].advantage}`
-                        }
-                        else if (diceArray[i].has.disadvantage) {
+                        } else if (diceArray[i].has.disadvantage) {
                             formattedString += `[${diceArray[i].results.join(', ')}]d`
                             formattedString += ` => ${diceArray[i].disadvantage}`
-                        }
-                        else if (diceArray[i].has.greater) {
+                        } else if (diceArray[i].has.greater) {
                             formattedString += `[${diceArray[i].results.join(', ') || 0}] > ${diceArray[i].diceString.split('>')[1]} => `
                             formattedString += `(${diceArray[i].greater.join(', ') || 0})`
                             formattedString += ` => ${diceArray[i].greaterSum}`
-                        }
-                        else if (diceArray[i].has.less) {
+                        } else if (diceArray[i].has.less) {
                             formattedString += `[${diceArray[i].results.join(', ') || 0}] < ${diceArray[i].diceString.split('<')[1]} => `
                             formattedString += `(${diceArray[i].less.join(', ') || 0})`
                             formattedString += ` => ${diceArray[i].lessSum}`
-                        }
-                        else {
+                        } else {
                             formattedString += `[${diceArray[i].sum}]`
                         }
-                    }
-                    else {
+                    } else {
                         formattedString += `${diceArray[i]}`
                     }
                 }
@@ -560,39 +538,36 @@ function formatDiceStringOutput(unformattedDices: any) {
         for (let i = 0; i < unformattedDices.resolvedDices.length; i++) {
             if (Array.isArray(unformattedDices.resolvedDices[i])) {
                 formatDiceResolvedRecursivly(unformattedDices.resolvedDices[i])
-            }
-            else {
+            } else {
                 if (typeof unformattedDices.resolvedDices[i] == 'object') {
                     if (unformattedDices.resolvedDices[i].has.advantage) {
                         formattedString += `[${unformattedDices.resolvedDices[i].results.join(', ')}]v`
                         formattedString += ` => ${unformattedDices.resolvedDices[i].advantage}`
-                    }
-                    else if (unformattedDices.resolvedDices[i].has.disadvantage) {
+                    } else if (unformattedDices.resolvedDices[i].has.disadvantage) {
                         formattedString += `[${unformattedDices.resolvedDices[i].results.join(', ')}]d`
                         formattedString += ` => ${unformattedDices.resolvedDices[i].disadvantage}`
-                    }
-                    else if (unformattedDices.resolvedDices[i].has.greater) {
-                        formattedString += `[${unformattedDices.resolvedDices[i].results.join(', ') || 0}] > ${unformattedDices.resolvedDices[i].diceString.split('>')[1]} => `
+                    } else if (unformattedDices.resolvedDices[i].has.greater) {
+                        formattedString += `[${unformattedDices.resolvedDices[i].results.join(', ') || 0}] > ${
+                            unformattedDices.resolvedDices[i].diceString.split('>')[1]
+                        } => `
                         formattedString += `(${unformattedDices.resolvedDices[i].greater.join(', ') || 0})`
                         formattedString += ` => ${unformattedDices.resolvedDices[i].greaterSum}`
-                    }
-                    else if (unformattedDices.resolvedDices[i].has.less) {
-                        formattedString += `[${unformattedDices.resolvedDices[i].results.join(', ') || 0}] < ${unformattedDices.resolvedDices[i].diceString.split('<')[1]} => `
+                    } else if (unformattedDices.resolvedDices[i].has.less) {
+                        formattedString += `[${unformattedDices.resolvedDices[i].results.join(', ') || 0}] < ${
+                            unformattedDices.resolvedDices[i].diceString.split('<')[1]
+                        } => `
                         formattedString += `(${unformattedDices.resolvedDices[i].less.join(', ') || 0})`
                         formattedString += ` => ${unformattedDices.resolvedDices[i].lessSum}`
-                    }
-                    else {
+                    } else {
                         if (unformattedDices.resolvedDices[i].results.length > 1) {
                             formattedString += `[${unformattedDices.resolvedDices[i].results.join(', ')}] => `
                         }
                         formattedString += `[${unformattedDices.resolvedDices[i].sum}]`
                     }
-                }
-                else {
+                } else {
                     if (formattedString.endsWith(' ')) {
                         formattedString += `${unformattedDices.resolvedDices[i]}`
-                    }
-                    else {
+                    } else {
                         formattedString += ` ${unformattedDices.resolvedDices[i]} `
                     }
                 }
@@ -608,22 +583,18 @@ function formatDiceStringOutput(unformattedDices: any) {
         if (unformattedDices.has.advantage) {
             formattedString += `[${unformattedDices.results.join(', ')}]v`
             formattedString += ` = ${unformattedDices.advantage}`
-        }
-        else if (unformattedDices.has.disadvantage) {
+        } else if (unformattedDices.has.disadvantage) {
             formattedString += `[${unformattedDices.results.join(', ')}]d`
             formattedString += ` = ${unformattedDices.disadvantage}`
-        }
-        else if (unformattedDices.has.greater) {
+        } else if (unformattedDices.has.greater) {
             formattedString += `[${unformattedDices.results.join(', ') || 0}] > ${unformattedDices.diceString.split('>')[1]} => `
             formattedString += `(${unformattedDices.greater.join(', ') || 0})`
             formattedString += ` = ${unformattedDices.greaterSum}`
-        }
-        else if (unformattedDices.has.less) {
+        } else if (unformattedDices.has.less) {
             formattedString += `[${unformattedDices.results.join(', ') || 0}] < ${unformattedDices.diceString.split('<')[1]} => `
             formattedString += `(${unformattedDices.less.join(', ') || 0})`
             formattedString += ` = ${unformattedDices.lessSum}`
-        }
-        else {
+        } else {
             if (unformattedDices.results.length > 1) {
                 formattedString += `[${unformattedDices.results.join(', ')}] = `
             }
@@ -645,26 +616,22 @@ function diceRoller(dice: string) {
         if (diceArray.length == 1) {
             if (diceArray[0].match(/(?<=[+-/*()[\]{}])|(?=[+-/*()[\]{}])/gi)) {
                 return diceArray[0]
-            }
-            else {
+            } else {
                 if (diceArray[0][0] == 'd' || diceArray[0][0] == 'D') {
                     diceArray[0] = '1' + diceArray[0]
                 }
 
                 return { ...buildDiceObj(diceArray[0]), diceString: diceArray[0] }
             }
-        }
-        else {
+        } else {
             diceArray.forEach((dice, index) => {
                 if (dice.match(/(?<=[+-/*()[\]{}])|(?=[+-/*()[\]{}])/gi)) {
                     operationsStack.push(dice)
-                }
-                else {
+                } else {
                     try {
                         if (dice.match(/(?<!d)\d+$/gi)) {
                             operationsStack.push(dice)
-                        }
-                        else {
+                        } else {
                             if (dice[0] == 'd' || dice[0] == 'D') {
                                 dice = '1' + dice
                                 diceArray[index] = dice
@@ -672,31 +639,30 @@ function diceRoller(dice: string) {
 
                             operationsStack.push(dice)
                         }
-                    }
-                    catch (err) {
+                    } catch (err) {
                         throw err
                     }
                 }
             })
 
             function separateByPriority(expressionArray: string[]) {
-                const stack: any = [];
-                let separatedOperations = [];
+                const stack: any = []
+                let separatedOperations = []
 
                 for (const token of expressionArray) {
                     if (token === '(') {
-                        stack.push(separatedOperations);
-                        separatedOperations = [];
+                        stack.push(separatedOperations)
+                        separatedOperations = []
                     } else if (token === ')') {
-                        const lastSeparated = separatedOperations;
-                        separatedOperations = stack.pop();
-                        separatedOperations.push(lastSeparated);
+                        const lastSeparated = separatedOperations
+                        separatedOperations = stack.pop()
+                        separatedOperations.push(lastSeparated)
                     } else {
-                        separatedOperations.push(token);
+                        separatedOperations.push(token)
                     }
                 }
 
-                return separatedOperations;
+                return separatedOperations
             }
 
             const prioritizedOperations = separateByPriority(operationsStack)
@@ -705,12 +671,10 @@ function diceRoller(dice: string) {
                 if (typeof subExpression === 'string') {
                     if (subExpression.match(/(?<=[+-/*()[\]{}])|(?=[+-/*()[\]{}])/gi)) {
                         return subExpression
-                    }
-                    else {
+                    } else {
                         if (!isNaN(Number(subExpression))) {
                             return subExpression
-                        }
-                        else {
+                        } else {
                             if (subExpression[0] == 'd' || subExpression[0] == 'D') {
                                 subExpression = '1' + subExpression
                             }
@@ -718,8 +682,7 @@ function diceRoller(dice: string) {
                             return buildDiceObj(subExpression)
                         }
                     }
-                }
-                else {
+                } else {
                     return subExpression.map(resolveExpression)
                 }
             }
@@ -751,11 +714,10 @@ function diceRoller(dice: string) {
             return {
                 diceArray,
                 resolvedDices: resolvedOperations,
-                final: finalResult
+                final: finalResult,
             }
         }
-    }
-    else {
+    } else {
         throw new Error('Invalid dice string')
     }
 }

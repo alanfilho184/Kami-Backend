@@ -1,5 +1,5 @@
-import { EventEmitter } from 'events';
+import { EventEmitter } from 'events'
 
-const websocketEvents = new EventEmitter();
+const websocketEvents = new EventEmitter()
 
-export default websocketEvents;
+export default websocketEvents

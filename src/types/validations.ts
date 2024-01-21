@@ -81,7 +81,7 @@ class Sheet_Name {
     constructor(sheet_name: string) {
         if (sheet_name.length > 32) {
             throw new ValidationError(`"${sheet_name}" is not a valid sheet_name`, `Exceeded the maximum of 32 characters`)
-        } else if (sheet_name.match(/[ '$%]/g)) {
+        } else if (sheet_name.match(/['$%]/g)) {
             throw new ValidationError(`"${sheet_name}" is not a valid sheet_name`, `Contains invalid characters`)
         } else {
             this.sheet_name = sheet_name
@@ -103,7 +103,7 @@ class Macro_Name {
     constructor(macro_name: string) {
         if (macro_name.length > 32) {
             throw new ValidationError(`"${macro_name}" is not a valid macro_name`, `Exceeded the maximum of 32 characters`)
-        } else if (macro_name.match(/[ '$%]/g)) {
+        } else if (macro_name.match(/['$%]/g)) {
             throw new ValidationError(`"${macro_name}" is not a valid macro_name`, `Contains invalid characters`)
         } else {
             this.macro_name = macro_name

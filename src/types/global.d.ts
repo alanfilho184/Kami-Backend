@@ -1,7 +1,7 @@
 import * as validations from './validations'
 import { PrismaClient } from '@prisma/client'
 
-export { }
+export {}
 
 declare global {
     type Db = PrismaClient
@@ -19,7 +19,7 @@ declare global {
 
     enum Section_Type {
         STANDARD = 0,
-        DESCRIPTION = 1
+        DESCRIPTION = 1,
     }
 
     enum Attribute_Type {
@@ -27,7 +27,7 @@ declare global {
         NUMBER = 1,
         IMAGE = 2,
         LIST = 3,
-        BAR = 4
+        BAR = 4,
     }
 
     enum Macro_Type {
@@ -87,26 +87,30 @@ declare global {
         sheet_password: string
         is_public: boolean
         attributes: {
-            sections: [{
-                name: string,
-                position: number,
-                type: Section_Type,
-                attributes: [{
-                    name: string,
-                    position: number,
-                    type: Attribute_Type,
-                    value: string | number,
-                    config?: {
-                        width?: number,
-                        height?: number,
-                        max?: number,
-                        min?: number,
-                        step?: number,
-                        max_length?: number,
-                        min_length?: number
-                    }
-                }]
-            }]
+            sections: [
+                {
+                    name: string
+                    position: number
+                    type: Section_Type
+                    attributes: [
+                        {
+                            name: string
+                            position: number
+                            type: Attribute_Type
+                            value: string | number
+                            config?: {
+                                width?: number
+                                height?: number
+                                max?: number
+                                min?: number
+                                step?: number
+                                max_length?: number
+                                min_length?: number
+                            }
+                        },
+                    ]
+                },
+            ]
         }
         legacy: boolean
         last_use: Date
@@ -124,16 +128,20 @@ declare global {
         user?: Express.Request['user']
         macro_name: Macro_Name
         macros: {
-            sections: [{
-                name: string,
-                position: number,
-                macros: [{
-                    name: string,
-                    position: number,
-                    value: string
-                    type: Macro_Type
-                }]
-            }]
+            sections: [
+                {
+                    name: string
+                    position: number
+                    macros: [
+                        {
+                            name: string
+                            position: number
+                            value: string
+                            type: Macro_Type
+                        },
+                    ]
+                },
+            ]
         }
         is_public: boolean
         last_use: Date

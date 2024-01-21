@@ -99,7 +99,7 @@ class UserServices {
                 field: 'username',
                 message: 'Nome de usuário já existe',
             })
-        } catch (err) { }
+        } catch (err) {}
 
         try {
             await this.db.users.findFirstOrThrow({ where: { email: user.email } })
@@ -108,7 +108,7 @@ class UserServices {
                 field: 'email',
                 message: 'Email já existe',
             })
-        } catch (err) { }
+        } catch (err) {}
 
         return invalidFields
     }
@@ -159,7 +159,7 @@ class UserServices {
                     field: 'username',
                     message: 'Nome de usuário já existe',
                 })
-            } catch (err) { }
+            } catch (err) {}
         }
 
         return invalidFields

@@ -76,16 +76,14 @@ export function loggerWebsocket(socket: Socket, next: (Error?: Error) => void) {
     let time = DateTime.now().setZone('America/Fortaleza').toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)
     const info = `User: [ID: ${socket.data.id} Name: ${socket.data.username}]`
 
-    logHandler.updateActualLogFile(`[ ${color.green(time)} ] - [ ${color.cyan(info)} ] - [ Websocket Connected ]\n`)
+    logHandler.updateActualLogFile(`[ ${time} ] - [ ${info} ] - [ Websocket Connected ]\n`)
     console.log(`[ ${color.green(time)} ] - [ ${color.cyan(info)} ] - [ ${color.yellow('Websocket Connected')} ]\n`)
 
     socket.on('disconnect', () => {
         time = DateTime.now().setZone('America/Fortaleza').toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)
 
         if (process.env.NODE_ENV != 'test') {
-            console.log(
-                `[ ${color.green(time)} ] - [ ${color.cyan(info)} ] - [ ${color.yellow('Websocket Disconnected')} ]\n`,
-            )
+            console.log(`[ ${color.green(time)} ] - [ ${color.cyan(info)} ] - [ ${color.yellow('Websocket Disconnected')} ]\n`)
         }
         logHandler.updateActualLogFile(`[ ${time} ] - [ ${info} ] - [ Websocket Disconnected ]\n`)
     })
@@ -94,14 +92,22 @@ export function loggerWebsocket(socket: Socket, next: (Error?: Error) => void) {
         time = DateTime.now().setZone('America/Fortaleza').toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)
 
         logHandler.updateActualLogFile(`[ ${time} ] - [ WS IN ${event} ] - [ ${info} ] - [ Request Body: ${JSON.stringify(args)} ]\n`)
-        console.log(`[ ${color.green(time)} ] - [ WS IN ${color.green(event)} ] - [ ${color.cyan(info)} ] - [ ${color.cyan(`Request Body: ${JSON.stringify(args)}`)} ]\n`)
+        console.log(
+            `[ ${color.green(time)} ] - [ WS IN ${color.green(event)} ] - [ ${color.cyan(info)} ] - [ ${color.cyan(
+                `Request Body: ${JSON.stringify(args)}`,
+            )} ]\n`,
+        )
     })
 
     socket.onAnyOutgoing((event, ...args) => {
         time = DateTime.now().setZone('America/Fortaleza').toLocaleString(DateTime.DATETIME_SHORT_WITH_SECONDS)
 
         logHandler.updateActualLogFile(`[ ${time} ] - [ WS OUT ${event} ] - [ ${info} ] - [ Response Body: ${JSON.stringify(args)} ]\n`)
-        console.log(`[ ${color.green(time)} ] - [ WS OUT ${color.green(event)} ] - [ ${color.cyan(info)} ] - [ ${color.cyan(`Response Body: ${JSON.stringify(args)}`)} ]\n`)
+        console.log(
+            `[ ${color.green(time)} ] - [ WS OUT ${color.green(event)} ] - [ ${color.cyan(info)} ] - [ ${color.cyan(
+                `Response Body: ${JSON.stringify(args)}`,
+            )} ]\n`,
+        )
     })
 
     next()

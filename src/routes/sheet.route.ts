@@ -29,15 +29,13 @@ router.get('/one', async (req: Request, res: Response) => {
                     }
 
                     res.status(200).json({ sheet: sheet })
-                }
-                else {
+                } else {
                     res.status(403).json({ error: 'Forbidden' })
                 }
             } else {
                 res.status(404).json({ error: 'Sheet not found' })
             }
-        }
-        else if (req.query.userId && req.query.sheetName) {
+        } else if (req.query.userId && req.query.sheetName) {
             const sheet = await sheetController.getByUserIdAndSheetName(Number(req.query.userId), req.query.sheetName.toString())
 
             if (sheet) {
@@ -50,15 +48,13 @@ router.get('/one', async (req: Request, res: Response) => {
                     }
 
                     res.status(200).json({ sheet: sheet })
-                }
-                else {
+                } else {
                     res.status(403).json({ error: 'Forbidden' })
                 }
             } else {
                 res.status(404).json({ error: 'Sheet not found' })
             }
-        }
-        else if (req.query.username && req.query.sheetName) {
+        } else if (req.query.username && req.query.sheetName) {
             const sheet = await sheetController.getByUsernameAndSheetName(req.query.username.toString(), req.query.sheetName.toString())
 
             if (sheet) {
@@ -71,15 +67,13 @@ router.get('/one', async (req: Request, res: Response) => {
                     }
 
                     res.status(200).json({ sheet: sheet })
-                }
-                else {
+                } else {
                     res.status(403).json({ error: 'Forbidden' })
                 }
             } else {
                 res.status(404).json({ error: 'Sheet not found' })
             }
-        }
-        else {
+        } else {
             res.status(400).json({ error: 'Missing parameters' })
         }
     } catch (err) {
@@ -98,8 +92,7 @@ router.get('/all', async (req: Request, res: Response) => {
             } else {
                 res.status(404).json({ error: 'Sheets not found' })
             }
-        }
-        else {
+        } else {
             res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
         }
     } catch (err) {
@@ -117,8 +110,7 @@ router.post('/create', async (req: Request, res: Response) => {
 
                 if (validationErrors.length > 0) {
                     res.status(400).json({ errors: validationErrors })
-                }
-                else {
+                } else {
                     const preparedSheet = await sheetServices.prepareSheet(req.body, req.user.id)
 
                     const sheet = await sheetController.create(preparedSheet)
@@ -129,12 +121,10 @@ router.post('/create', async (req: Request, res: Response) => {
                         res.status(500).json({ error: 'Internal server error' })
                     }
                 }
-            }
-            else {
+            } else {
                 res.status(400).json({ error: 'Missing parameters' })
             }
-        }
-        else {
+        } else {
             res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
         }
     } catch (err) {
@@ -151,8 +141,7 @@ router.put('/update', async (req: Request, res: Response) => {
 
                 if (validationErrors.length > 0) {
                     res.status(400).json({ errors: validationErrors })
-                }
-                else {
+                } else {
                     const preparedSheet = await sheetServices.prepareSheetUpdate(req.body)
 
                     const sheet = await sheetController.updateById(Number(req.body.id), preparedSheet)
@@ -164,12 +153,10 @@ router.put('/update', async (req: Request, res: Response) => {
                         res.status(500).json({ error: 'Internal server error' })
                     }
                 }
-            }
-            else {
+            } else {
                 res.status(400).json({ error: 'Missing parameters' })
             }
-        }
-        else {
+        } else {
             res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
         }
     } catch (err) {
@@ -194,19 +181,16 @@ router.delete('/delete', async (req: Request, res: Response) => {
                         } else {
                             res.status(500).json({ error: 'Internal server error' })
                         }
-                    }
-                    else {
+                    } else {
                         res.status(403).json({ error: 'Forbidden' })
                     }
                 } else {
                     res.status(404).json({ error: 'Sheet not found' })
                 }
-            }
-            else {
+            } else {
                 res.status(400).json({ error: 'Missing parameters' })
             }
-        }
-        else {
+        } else {
             res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
         }
     } catch (err) {

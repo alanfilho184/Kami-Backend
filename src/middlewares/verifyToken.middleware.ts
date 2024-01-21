@@ -18,8 +18,7 @@ export async function verifyToken(req: Request, res: Response, next: NextFunctio
         if (req.headers.authorization) {
             if (req.headers.authorization === config.default.API_TOKEN) {
                 next()
-            }
-            else {
+            } else {
                 try {
                     const payload = authServices.verifyToken(req.headers.authorization)
 
@@ -39,33 +38,34 @@ export async function verifyToken(req: Request, res: Response, next: NextFunctio
 
                         next()
                     } else {
-                        if (acessibleIfPublic.includes(`${req.method}|${req.path.endsWith('/') ? req.path.substring(0, req.path.length - 1) : req.path}`)) {
+                        if (
+                            acessibleIfPublic.includes(
+                                `${req.method}|${req.path.endsWith('/') ? req.path.substring(0, req.path.length - 1) : req.path}`,
+                            )
+                        ) {
                             next()
-                        }
-                        else {
+                        } else {
                             return res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
                         }
                     }
                 } catch (err) {
-                    if (acessibleIfPublic.includes(`${req.method}|${req.path.endsWith('/') ? req.path.substring(0, req.path.length - 1) : req.path}`)) {
+                    if (
+                        acessibleIfPublic.includes(`${req.method}|${req.path.endsWith('/') ? req.path.substring(0, req.path.length - 1) : req.path}`)
+                    ) {
                         next()
-                    }
-                    else {
+                    } else {
                         return res.status(401).json({ title: 'Unathorized', message: 'Invalid token' })
                     }
                 }
             }
-        }
-        else {
+        } else {
             if (acessibleIfPublic.includes(`${req.method}|${req.path.endsWith('/') ? req.path.substring(0, req.path.length - 1) : req.path}`)) {
                 next()
-            }
-            else {
+            } else {
                 return res.status(401).json({ title: 'Unathorized', message: 'Authorization token is required' })
             }
         }
-    }
-    else {
+    } else {
         next()
     }
 }
@@ -82,8 +82,7 @@ export async function verifyTokenWebsocket(socket: Socket, next: (Error?: Error)
                 if (!payload) {
                     socket.disconnect(true)
                     next(new Error('Invalid token'))
-                } 
-                else {
+                } else {
                     const user = await userController.getById(payload.id)
 
                     if (user) {
@@ -97,15 +96,13 @@ export async function verifyTokenWebsocket(socket: Socket, next: (Error?: Error)
                         }
 
                         next()
-                    }
-                    else {
+                    } else {
                         socket.disconnect(true)
                         next(new Error('User not found'))
                     }
                 }
             }
-        } 
-        catch (err) {
+        } catch (err) {
             socket.disconnect(true)
             next(new Error('Error while trying to validate token'))
         }

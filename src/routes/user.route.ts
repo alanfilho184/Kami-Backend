@@ -24,8 +24,8 @@ router.get('/', async (req: Request, res: Response) => {
                             username: discordUser.username,
                             discriminator: discordUser.discriminator,
                             locale: discordUser.locale,
-                            avatar_url: `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
-                        }
+                            avatar_url: `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`,
+                        },
                     },
                 })
             }
@@ -84,15 +84,14 @@ router.patch('/', async (req: Request, res: Response) => {
 
             if (preparedUser.password) {
                 Events.emit('user-password-changed', req.user.id)
-            }
-            else {
+            } else {
                 const newUser: Express.Request['user'] = {
                     id: req.user.id,
                     discord_id: req.user.discord_id,
                     username: req.body.username ? req.body.username : req.user.username,
                     avatar_url: req.body.avatar !== undefined ? req.body.avatar : req.user.avatar_url,
                     is_beta: req.user.is_beta,
-                    is_premium: req.user.is_premium
+                    is_premium: req.user.is_premium,
                 }
 
                 Events.emit('user-changed', newUser)

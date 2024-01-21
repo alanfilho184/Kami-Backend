@@ -26,7 +26,7 @@ function toSheet(sheet: any): Sheet | null {
             is_public: sheet.is_public,
             legacy: sheet.legacy,
             attributes: sheet.attributes,
-            last_use: sheet.last_use
+            last_use: sheet.last_use,
         }
     } catch (err) {
         return null
@@ -44,7 +44,7 @@ function toSheetArray(sheets: any[]): Sheet[] | null {
                 is_public: sheet.is_public,
                 legacy: sheet.legacy,
                 attributes: sheet.attributes,
-                last_use: sheet.last_use
+                last_use: sheet.last_use,
             }
         })
     } catch (err) {
@@ -58,7 +58,7 @@ function toSheetHeadArray(sheets: any[]): Sheet_Head[] | null {
             return {
                 id: sheet.id,
                 user_id: sheet.user_id,
-                sheet_name: sheet.sheet_name
+                sheet_name: sheet.sheet_name,
             }
         })
     } catch (err) {
@@ -82,7 +82,7 @@ export default class SheetController {
                     attributes: sheet.attributes,
                     is_public: sheet.is_public,
                     legacy: sheet.legacy,
-                    last_use: sheet.last_use
+                    last_use: sheet.last_use,
                 },
             }),
         )
@@ -107,8 +107,8 @@ export default class SheetController {
                 select: {
                     id: true,
                     user_id: true,
-                    sheet_name: true
-                }
+                    sheet_name: true,
+                },
             }),
         )
     }
@@ -136,8 +136,7 @@ export default class SheetController {
                     },
                 }),
             )
-        }
-        else {
+        } else {
             return null
         }
     }
@@ -153,7 +152,7 @@ export default class SheetController {
                     attributes: newSheet.attributes,
                     is_public: newSheet.is_public,
                     legacy: false,
-                    last_use: newSheet.last_use
+                    last_use: newSheet.last_use,
                 },
             }),
         )

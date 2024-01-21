@@ -119,7 +119,7 @@ export default class UserController {
                 },
                 data: {
                     user_id: newId,
-                }
+                },
             }),
             this.db.irt_sheets.updateMany({
                 where: {
@@ -127,7 +127,7 @@ export default class UserController {
                 },
                 data: {
                     user_id: newId,
-                }
+                },
             }),
             this.db.users_config.updateMany({
                 where: {
@@ -135,7 +135,7 @@ export default class UserController {
                 },
                 data: {
                     user_id: newId,
-                }
+                },
             }),
             this.db.blocked_users.updateMany({
                 where: {
@@ -143,12 +143,12 @@ export default class UserController {
                 },
                 data: {
                     user_id: newId,
-                }
+                },
             }),
             this.db.users.delete({
                 where: {
                     id: oldId,
-                }
+                },
             }),
             this.db.users.update({
                 where: {
@@ -156,8 +156,8 @@ export default class UserController {
                 },
                 data: {
                     discord_id: `${discordUser.discord_id}`,
-                }
-            })
+                },
+            }),
         ])
     }
 }

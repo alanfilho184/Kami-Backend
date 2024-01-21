@@ -19,10 +19,9 @@ function toMacro(macro: any): Macro | null {
             macro_name: macro.macro_name,
             macros: macro.macros,
             is_public: macro.is_public,
-            last_use: macro.last_use
+            last_use: macro.last_use,
         }
-    }
-    catch (err) {
+    } catch (err) {
         return null
     }
 }
@@ -36,11 +35,10 @@ function toMacroArray(macros: any[]): Macro[] | null {
                 macro_name: macro.macro_name,
                 macros: macro.macros,
                 is_public: macro.is_public,
-                last_use: macro.last_use
+                last_use: macro.last_use,
             }
         })
-    }
-    catch (err) {
+    } catch (err) {
         return null
     }
 }
@@ -52,11 +50,10 @@ function toMacroHeadArray(macros: any[]): Macro_Head[] | null {
                 id: macro.id,
                 user_id: macro.user_id,
                 sheet_id: macro.sheet_id,
-                macro_name: macro.macro_name
+                macro_name: macro.macro_name,
             }
         })
-    }
-    catch (err) {
+    } catch (err) {
         return null
     }
 }
@@ -68,72 +65,86 @@ export default class MacroController {
     }
 
     async create(macro: PreparedMacro): Promise<Macro | null> {
-        return toMacro(await this.db.macros.create({
-            data: {
-                user_id: macro.user_id,
-                macro_name: macro.macro_name.macro_name,
-                macros: macro.macros,
-                is_public: macro.is_public
-            }
-        }))
+        return toMacro(
+            await this.db.macros.create({
+                data: {
+                    user_id: macro.user_id,
+                    macro_name: macro.macro_name.macro_name,
+                    macros: macro.macros,
+                    is_public: macro.is_public,
+                },
+            }),
+        )
     }
 
     async getById(id: number): Promise<Macro | null> {
-        return toMacro(await this.db.macros.findUnique({
-            where: {
-                id: id
-            }
-        }))
+        return toMacro(
+            await this.db.macros.findUnique({
+                where: {
+                    id: id,
+                },
+            }),
+        )
     }
 
     async getByUserId(userId: number): Promise<Macro_Head[] | null> {
-        return toMacroHeadArray(await this.db.macros.findMany({
-            where: {
-                user_id: userId
-            },
-            select: {
-                id: true,
-                user_id: true,
-                macro_name: true,
-            }
-        }))
+        return toMacroHeadArray(
+            await this.db.macros.findMany({
+                where: {
+                    user_id: userId,
+                },
+                select: {
+                    id: true,
+                    user_id: true,
+                    macro_name: true,
+                },
+            }),
+        )
     }
 
     async getByUserIdAndMacroName(userId: number, macroName: string): Promise<Macro | null> {
-        return toMacro(await this.db.macros.findFirst({
-            where: {
-                user_id: userId,
-                macro_name: macroName
-            }
-        }))
+        return toMacro(
+            await this.db.macros.findFirst({
+                where: {
+                    user_id: userId,
+                    macro_name: macroName,
+                },
+            }),
+        )
     }
 
     async getAllByUserId(userId: number): Promise<Macro[] | null> {
-        return toMacroArray(await this.db.macros.findMany({
-            where: {
-                user_id: userId
-            }
-        }))
+        return toMacroArray(
+            await this.db.macros.findMany({
+                where: {
+                    user_id: userId,
+                },
+            }),
+        )
     }
 
     async updateById(id: number, macro: PreparedMacroUpdate): Promise<Macro | null> {
-        return toMacro(await this.db.macros.update({
-            where: {
-                id: id
-            },
-            data: {
-                macro_name: `${macro.macro_name}`,
-                macros: macro.macros,
-                is_public: macro.is_public
-            }
-        }))
+        return toMacro(
+            await this.db.macros.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    macro_name: `${macro.macro_name}`,
+                    macros: macro.macros,
+                    is_public: macro.is_public,
+                },
+            }),
+        )
     }
 
     async deleteById(id: number): Promise<Macro | null> {
-        return toMacro(await this.db.macros.delete({
-            where: {
-                id: id
-            }
-        }))
+        return toMacro(
+            await this.db.macros.delete({
+                where: {
+                    id: id,
+                },
+            }),
+        )
     }
 }
